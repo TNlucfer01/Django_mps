@@ -5,12 +5,12 @@ from .models import Product, Category
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
     list_display = ["name", "slug", "created_at"] # what is this sliug and why it is needed 
-    prepopulated_fields = {"slug": ("name",)}
+    prepopulated_fields = {"slug": ("name",)} # same question here 
     search_fields = ["name"]
 
 
 @admin.register(Product)
-class ProductAdmin(admin.ModelAdmin):
+class ProductAdmin(admin.ModelAdmin):  # what ar ethe things at the bottom and why is it they are like this ?
     list_display = ["name", "category", "price", "stock", "is_available", "created_at"]
     list_filter = ["category", "is_available", "created_at"]
     list_editable = ["price", "stock", "is_available"]

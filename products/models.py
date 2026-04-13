@@ -5,24 +5,24 @@ from django.utils.text import slugify
 
 class Category(models.Model):
     name = models.CharField(max_length=200, unique=True)
-    slug = models.SlugField(max_length=200, unique=True)
+    slug = models.SlugField(max_length=200, unique=True) # what s this 
     description = models.TextField(blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
 
-    class Meta:
+    class Meta: # what is this meta class evem do 
         verbose_name = "Category"
         verbose_name_plural = "Categories"
         ordering = ["name"]
 
-    def __str__(self):
+    def __str__(self): # what this constructor do 
         return self.name
 
-    def save(self, *args, **kwargs):
+    def save(self, *args, **kwargs): # what is it going to save 
         if not self.slug:
             self.slug = slugify(self.name)
         super().save(*args, **kwargs)
 
-    def get_absolute_url(self):
+    def get_absolute_url(self): # why do i need a abosulte url 
         return reverse("products:category_detail", kwargs={"category_slug": self.slug})
 
 
@@ -54,8 +54,8 @@ class Product(models.Model):
     def get_absolute_url(self):
         return reverse("products:product_detail", kwargs={"slug": self.slug})
 
-    def get_add_to_cart_url(self):
+    def get_add_to_cart_url(self): # wht does this function do ?
         return reverse("cart:add_to_cart", kwargs={"slug": self.slug})
 
-    def get_remove_from_cart_url(self):
+    def get_remove_from_cart_url(self): # what does this function do and how does this even do that ?
         return reverse("cart:remove_from_cart", kwargs={"slug": self.slug})

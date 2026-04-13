@@ -1,107 +1,185 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}{{ product.name }}{% endblock %}
+{% block title %}{{ product.name }} - Your Shop Name{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <nav aria-label="breadcrumb">
-        <ol class="breadcrumb">
-            <li class="breadcrumb-item"><a href="{% url 'core:home' %}">Home</a></li>
-            <li class="breadcrumb-item"><a href="{% url 'products:product_list' %}">Products</a></li>
-            <li class="breadcrumb-item active">{{ product.name }}</li>
-        </ol>
-    </nav>
-
-    <div class="row">
-        <div class="col-md-6">
-            {% if product.image %}
-            <img src="{{ product.image.url }}" class="img-fluid rounded" alt="{{ product.name }}">
-            {% else %}
-            <div class="bg-secondary text-white d-flex align-items-center justify-content-center rounded" style="height: 400px;">
-                No Image Available
+<section class="py-12 bg-base-100">
+    <div class="container mx-auto px-6">
+        <!-- Breadcrumbs -->
+        <nav class="mb-12">
+            <div class="text-sm breadcrumbs p-0 overflow-visible">
+                <ul class="font-bold opacity-40 uppercase tracking-widest text-[10px] gap-4">
+                    <li><a href="{% url 'core:home' %}" class="hover:text-primary transition-colors">Home</a></li>
+                    <li><a href="{% url 'products:product_list' %}" class="hover:text-primary transition-colors">Products</a></li>
+                    <li class="opacity-100 text-primary">{{ product.name }}</li>
+                </ul>
             </div>
-            {% endif %}
-        </div>
-        <div class="col-md-6">
-            <h1>{{ product.name }}</h1>
-            <p class="text-muted">Category: <a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></p>
-            <h2 class="text-primary">${{ product.price }}</h2>
-            <p>{{ product.description }}</p>
-            
-            <div class="mb-3">
-                {% if product.stock > 0 %}
-                <span class="badge bg-success">In Stock ({{ product.stock }} available)</span>
-                {% else %}
-                <span class="badge bg-danger">Out of Stock</span>
-                {% endif %}
-            </div>
+        </nav>
 
-            {% if product.stock > 0 %}
-            <form method="post" action="{{ product.get_add_to_cart_url }}">
-                {% csrf_token %}
-                <div class="mb-3">
-                    <label>Quantity:</label>
-                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" class="form-control" style="width: 100px;">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-20">
+            <!-- Product Image -->
+            <div class="animate-in slide-in-from-left duration-700">
+                <div class="relative rounded-[3rem] overflow-hidden shadow-2xl shadow-base-300 border border-base-200">
+                    {% if product.image %}
+                    <img src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-auto object-cover transform hover:scale-105 transition-transform duration-1000">
+                    {% else %}
+                    <div class="aspect-square bg-base-200 flex items-center justify-center text-base-content/10">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-32 w-32" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                        </svg>
+                    </div>
+                    {% endif %}
+                    
+                    <div class="absolute top-8 right-8">
+                        <div class="badge badge-primary p-4 rounded-xl font-black shadow-xl border-none">Premium Quality</div>
+                    </div>
                 </div>
-                <button type="submit" class="btn btn-primary btn-lg">Add to Cart</button>
-            </form>
-            {% endif %}
-        </div>
-    </div>
+            </div>
 
-    <div class="row mt-5">
-        <div class="col-12">
-            <h3>Reviews ({{ product.reviews.count }})</h3>
-            <hr>
-            
-            {% if user.is_authenticated %}
-            {% if not user_review %}
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h5>Write a Review</h5>
-                    <form method="post" action="{% url 'reviews:add_review' product.slug %}">
+            <!-- Product Info -->
+            <div class="space-y-10 animate-in slide-in-from-right duration-700">
+                <div class="space-y-4">
+                    <div class="inline-block px-4 py-1.5 rounded-full bg-primary/5 text-primary text-[10px] font-black uppercase tracking-[0.2em] border border-primary/20">
+                        {{ product.category.name }}
+                    </div>
+                    <h1 class="text-5xl lg:text-7xl font-black tracking-tighter leading-none">{{ product.name }}</h1>
+                    <div class="flex items-center gap-6 pt-2">
+                        <div class="text-5xl font-black text-primary tracking-tighter">${{ product.price }}</div>
+                        <div class="h-8 w-px bg-base-300"></div>
+                        <div class="flex items-center gap-2">
+                            {% if product.stock > 0 %}
+                            <div class="w-2.5 h-2.5 rounded-full bg-success"></div>
+                            <span class="text-sm font-bold opacity-60 uppercase tracking-widest">{{ product.stock }} in stock</span>
+                            {% else %}
+                            <div class="w-2.5 h-2.5 rounded-full bg-error"></div>
+                            <span class="text-sm font-bold opacity-60 uppercase tracking-widest">Out of Stock</span>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+
+                <p class="text-xl text-base-content/60 leading-relaxed font-medium">
+                    {{ product.description }}
+                </p>
+
+                {% if product.stock > 0 %}
+                <div class="bg-base-200/50 p-10 rounded-[2.5rem] border border-base-200">
+                    <form method="post" action="{{ product.get_add_to_cart_url }}" class="space-y-8">
                         {% csrf_token %}
-                        <div class="mb-3">
-                            <label>Rating:</label>
-                            <select name="rating" class="form-select" style="width: 150px;">
-                                <option value="5">5 - Excellent</option>
-                                <option value="4">4 - Good</option>
-                                <option value="3">3 - Average</option>
-                                <option value="2">2 - Poor</option>
-                                <option value="1">1 - Terrible</option>
-                            </select>
+                        <div class="flex items-center gap-8">
+                            <div class="space-y-4">
+                                <label class="text-[10px] font-black uppercase opacity-40 tracking-widest">Select Quantity</label>
+                                <div class="flex items-center bg-white rounded-2xl shadow-sm border border-base-300 p-1">
+                                    <input type="number" name="quantity" value="1" min="1" max="{{ product.stock }}" 
+                                           class="input bg-transparent border-none focus:ring-0 text-center font-bold text-xl w-32 [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                </div>
+                            </div>
                         </div>
-                        <div class="mb-3">
-                            <label>Comment:</label>
-                            <textarea name="comment" class="form-control" rows="3" required></textarea>
-                        </div>
-                        <button type="submit" class="btn btn-primary">Submit Review</button>
+                        <button type="submit" class="btn btn-primary btn-lg btn-block h-20 rounded-[1.5rem] shadow-2xl shadow-primary/20 font-black text-xl tracking-tight uppercase group">
+                            Add to Cart
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                            </svg>
+                        </button>
                     </form>
                 </div>
+                {% endif %}
             </div>
-            {% endif %}
-            {% else %}
-            <p><a href="{% url 'accounts:login' %}">Login</a> to write a review.</p>
-            {% endif %}
+        </div>
 
-            {% for review in product.reviews.all %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between">
-                        <h6>{{ review.user.username }}</h6>
-                        <span class="badge bg-warning">{{ review.rating }}/5</span>
+        <!-- Reviews Section -->
+        <div class="mt-32 space-y-16">
+            <div class="flex items-end justify-between border-b-4 border-base-200 pb-8">
+                <div class="space-y-2">
+                    <h3 class="text-4xl font-black tracking-tight uppercase">Customer Reviews</h3>
+                    <p class="text-base-content/50 font-medium">Hear from our community of quality enthusiasts</p>
+                </div>
+                <div class="text-6xl font-black text-primary/20 tracking-tighter">{{ product.reviews.count }}</div>
+            </div>
+            
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-20">
+                <!-- Write a Review -->
+                <div class="lg:col-span-5">
+                    {% if user.is_authenticated %}
+                    {% if not user_review %}
+                    <div class="bg-slate-900 rounded-[3rem] p-10 text-white shadow-2xl relative overflow-hidden">
+                        <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent pointer-events-none"></div>
+                        <div class="relative z-10 space-y-8">
+                            <h5 class="text-3xl font-black tracking-tight">Share Your Experience</h5>
+                            <form method="post" action="{% url 'reviews:add_review' product.slug %}" class="space-y-6">
+                                {% csrf_token %}
+                                <div class="form-control w-full">
+                                    <label class="label"><span class="label-text text-white/40 font-black uppercase tracking-widest text-[10px]">Your Rating</span></label>
+                                    <select name="rating" class="select select-bordered rounded-xl bg-white/10 border-white/20 text-white w-full">
+                                        <option value="5">⭐⭐⭐⭐⭐ - Excellent</option>
+                                        <option value="4">⭐⭐⭐⭐ - Good</option>
+                                        <option value="3">⭐⭐⭐ - Average</option>
+                                        <option value="2">⭐⭐ - Poor</option>
+                                        <option value="1">⭐ - Terrible</option>
+                                    </select>
+                                </div>
+                                <div class="form-control w-full">
+                                    <label class="label"><span class="label-text text-white/40 font-black uppercase tracking-widest text-[10px]">Your Feedback</span></label>
+                                    <textarea name="comment" class="textarea textarea-bordered rounded-2xl bg-white/10 border-white/20 text-white h-32 w-full" placeholder="What did you think of the product?" required></textarea>
+                                </div>
+                                <button type="submit" class="btn btn-white btn-block rounded-2xl font-black uppercase tracking-tight shadow-xl">Submit Review</button>
+                            </form>
+                        </div>
                     </div>
-                    <p class="text-muted small">{{ review.created_at|date:"F d, Y" }}</p>
-                    <p>{{ review.comment }}</p>
-                    {% if review.user == user or user.is_staff %}
-                    <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-sm btn-danger">Delete</a>
+                    {% else %}
+                    <div class="bg-base-200 p-8 rounded-[2.5rem] border border-base-300 text-center italic font-medium text-base-content/50">
+                        Thank you for your feedback!
+                    </div>
+                    {% endif %}
+                    {% else %}
+                    <div class="bg-base-200 p-12 rounded-[2.5rem] border-4 border-dashed border-base-300 text-center space-y-6">
+                        <p class="text-xl font-bold opacity-60 leading-relaxed">Login to share your experience with the community.</p>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-primary rounded-full px-12">Login Now</a>
+                    </div>
                     {% endif %}
                 </div>
+
+                <!-- Review Feed -->
+                <div class="lg:col-span-7 space-y-8">
+                    {% for review in product.reviews.all %}
+                    <div class="bg-base-100 p-10 rounded-[2.5rem] border border-base-200 shadow-sm hover:shadow-xl transition-all group relative">
+                        <div class="flex justify-between items-start mb-6">
+                            <div class="flex items-center gap-4">
+                                <div class="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center text-primary font-black uppercase">
+                                    {{ review.user.username|first }}
+                                </div>
+                                <div>
+                                    <h6 class="text-xl font-extrabold tracking-tight">{{ review.user.username }}</h6>
+                                    <p class="text-[10px] font-black opacity-30 uppercase tracking-widest">{{ review.created_at|date:"F d, Y" }}</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-1">
+                                {% for i in "123456"|make_list|slice:review.rating %}
+                                <div class="w-2 h-2 rounded-full bg-yellow-400"></div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                        <p class="text-lg text-base-content/70 italic leading-relaxed font-medium">"{{ review.comment }}"</p>
+                        
+                        {% if review.user == user or user.is_staff %}
+                        <div class="absolute top-8 right-8 lg:top-auto lg:bottom-8 lg:right-10 lg:opacity-0 group-hover:opacity-100 transition-opacity">
+                            <a href="{% url 'reviews:delete_review' review.id %}" class="btn btn-ghost btn-circle text-error hover:bg-error/10">
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                </svg>
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                    {% empty %}
+                    <div class="h-64 flex flex-col items-center justify-center space-y-6 text-center bg-base-200/30 rounded-[3rem] border-2 border-dashed border-base-300">
+                        <span class="text-sm font-bold uppercase tracking-[0.3em] text-base-content/30 italic">No reviews yet. Be the first!</span>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
-            {% empty %}
-            <p class="text-muted">No reviews yet. Be the first to review!</p>
-            {% endfor %}
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

@@ -1,70 +1,153 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Shopping Cart{% endblock %}
+{% block title %}Shopping Cart - Your Shop Name{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1>Shopping Cart</h1>
-    
-    {% if not cart %}
-    <div class="alert alert-info">
-        Your cart is empty. <a href="{% url 'products:product_list' %}">Continue shopping</a>
+<!-- Page Header -->
+<section class="bg-gradient-to-br from-[#7C3AED] via-[#4F46E5] to-[#2563EB] text-white py-16 lg:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
-    {% else %}
-    <table class="table">
-        <thead>
-            <tr>
-                <th>Product</th>
-                <th>Price</th>
-                <th>Quantity</th>
-                <th>Total</th>
-                <th>Action</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for item in cart %}
-            <tr>
-                <td>
-                    <a href="{{ item.product.get_absolute_url }}">
-                        {{ item.product.name }}
+    <div class="container mx-auto px-6 relative z-10 text-center animate-in slide-in-from-bottom duration-700">
+        <h1 class="text-4xl lg:text-5xl font-black mb-4 tracking-tight uppercase">Your Cart</h1>
+        <p class="text-lg text-white/80 font-medium uppercase tracking-widest text-[10px]">Review your selected items</p>
+    </div>
+</section>
+
+<section class="py-20 bg-base-100">
+    <div class="container mx-auto px-6">
+        {% if not cart %}
+        <div class="max-w-2xl mx-auto text-center space-y-8 bg-base-200/50 p-20 rounded-[3rem] border-4 border-dashed border-base-200">
+            <div class="w-24 h-24 mx-auto rounded-full bg-base-200 flex items-center justify-center text-base-content/10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
+                </svg>
+            </div>
+            <div class="space-y-4">
+                <h2 class="text-3xl font-black tracking-tight">Your cart is empty</h2>
+                <p class="text-base-content/60 font-medium">Looks like you haven't added anything yet.</p>
+            </div>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg rounded-full px-12 font-bold uppercase tracking-tight">Start Shopping</a>
+        </div>
+        {% else %}
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-16">
+            <!-- Cart Table -->
+            <div class="xl:col-span-8 overflow-x-auto">
+                <table class="table w-full border-separate border-spacing-y-4">
+                    <thead>
+                        <tr class="text-[10px] font-black uppercase tracking-[0.2em] text-base-content/40 border-none">
+                            <th class="bg-transparent pl-4">Product</th>
+                            <th class="bg-transparent text-center">Price</th>
+                            <th class="bg-transparent text-center">Quantity</th>
+                            <th class="bg-transparent text-center">Total</th>
+                            <th class="bg-transparent text-right pr-4">Action</th>
+                        </tr>
+                    </thead>
+                    <tbody class="space-y-4">
+                        {% for item in cart %}
+                        <tr class="bg-base-200/30 hover:bg-base-200 transition-colors rounded-[2rem] overflow-hidden">
+                            <td class="pl-6 py-8 rounded-l-[2rem]">
+                                <div class="flex items-center gap-6">
+                                    <div class="w-20 h-20 rounded-2xl overflow-hidden bg-base-200 flex-shrink-0 animate-in zoom-in duration-500">
+                                        {% if item.product.image %}
+                                        <img src="{{ item.product.image.url }}" alt="{{ item.product.name }}" class="w-full h-full object-cover">
+                                        {% else %}
+                                        <div class="w-full h-full flex items-center justify-center text-base-content/10">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
+                                            </svg>
+                                        </div>
+                                        {% endif %}
+                                    </div>
+                                    <div>
+                                        <a href="{{ item.product.get_absolute_url }}" class="text-xl font-extrabold tracking-tight hover:text-primary transition-colors block">{{ item.product.name }}</a>
+                                        <p class="text-[10px] font-black opacity-30 uppercase tracking-widest mt-1">{{ item.product.category.name }}</p>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="text-center font-bold text-lg">${{ item.price }}</td>
+                            <td class="text-center">
+                                <form method="post" action="{% url 'cart:update_cart' item.product.id %}" class="flex items-center justify-center gap-2">
+                                    {% csrf_token %}
+                                    <input type="number" name="quantity" value="{{ item.quantity }}" min="1" 
+                                           class="input input-sm border-base-300 rounded-xl bg-white w-20 text-center font-bold [appearance:textfield] [&::-webkit-outer-spin-button]:appearance-none [&::-webkit-inner-spin-button]:appearance-none">
+                                    <button type="submit" class="btn btn-sm btn-ghost btn-circle hover:bg-primary hover:text-white transition-all">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </td>
+                            <td class="text-center font-black text-xl text-primary tracking-tighter">${{ item.total_price }}</td>
+                            <td class="pr-6 text-right rounded-r-[2rem]">
+                                <form method="post" action="{% url 'cart:remove_from_cart' item.product.slug %}">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-ghost btn-circle text-error hover:bg-error/10">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                                        </svg>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                
+                <div class="mt-12 flex justify-between items-center bg-base-200/50 p-6 rounded-[2rem]">
+                    <a href="{% url 'products:product_list' %}" class="btn btn-ghost rounded-full font-bold uppercase tracking-tight gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16l-4-4m0 0l4-4m-4 4h18" />
+                        </svg>
+                        Continue Shopping
                     </a>
-                </td>
-                <td>${{ item.price }}</td>
-                <td>
-                    <form method="post" action="{% url 'cart:update_cart' item.product.id %}" class="d-flex">
-                        {% csrf_token %}
-                        <input type="number" name="quantity" value="{{ item.quantity }}" min="1" class="form-control" style="width: 70px;">
-                        <button type="submit" class="btn btn-sm btn-secondary ms-2">Update</button>
-                    </form>
-                </td>
-                <td>${{ item.total_price }}</td>
-                <td>
-                    <form method="post" action="{% url 'cart:remove_from_cart' item.product.slug %}">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-danger">Remove</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-        </tbody>
-        <tfoot>
-            <tr>
-                <td colspan="3" class="text-end"><strong>Total:</strong></td>
-                <td><strong>${{ cart.get_total_price }}</strong></td>
-                <td>
                     <form method="post" action="{% url 'cart:clear_cart' %}">
                         {% csrf_token %}
-                        <button type="submit" class="btn btn-sm btn-warning">Clear Cart</button>
+                        <button type="submit" class="btn btn-error btn-ghost btn-sm rounded-full font-bold uppercase tracking-widest text-[10px]">Clear Cart</button>
                     </form>
-                </td>
-            </tr>
-        </tfoot>
-    </table>
-    
-    <div class="d-flex justify-content-between mt-4">
-        <a href="{% url 'products:product_list' %}" class="btn btn-outline-primary">Continue Shopping</a>
-        <a href="{% url 'orders:checkout' %}" class="btn btn-primary">Proceed to Checkout</a>
+                </div>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="xl:col-span-4 space-y-8">
+                <div class="bg-base-100 p-8 md:p-10 rounded-[3rem] border border-base-200 shadow-2xl shadow-base-200/50 space-y-10">
+                    <h3 class="text-3xl font-black tracking-tight">Summary</h3>
+                    
+                    <div class="space-y-6">
+                        <div class="flex justify-between items-center font-bold">
+                            <span class="opacity-40 uppercase tracking-widest text-[10px]">Total Items</span>
+                            <span class="text-xl">{{ cart|length }}</span>
+                        </div>
+                        <div class="h-px bg-base-200 w-full"></div>
+                        <div class="flex justify-between items-center text-primary">
+                            <span class="font-black uppercase tracking-widest text-xs">Subtotal</span>
+                            <span class="text-4xl font-black tracking-tighter">${{ cart.get_total_price }}</span>
+                        </div>
+                    </div>
+                    
+                    <div class="pt-6">
+                        <a href="{% url 'orders:checkout' %}" class="btn btn-primary btn-lg btn-block h-20 rounded-[1.5rem] shadow-2xl shadow-primary/20 font-black text-xl tracking-tight uppercase group">
+                            Checkout Now
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </a>
+                    </div>
+                    
+                    <div class="bg-base-200/50 p-6 rounded-2xl flex items-center gap-4 border border-base-200 mt-10">
+                        <div class="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+                            </svg>
+                        </div>
+                        <p class="text-xs font-bold opacity-60 leading-relaxed uppercase tracking-wider">Secure checkout with full purchase protection.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
     </div>
-    {% endif %}
-</div>
+</section>
 {% endblock %}

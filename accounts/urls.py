@@ -1,3 +1,5 @@
+# just routing pages right 
+
 from django.urls import path
 from . import views
 

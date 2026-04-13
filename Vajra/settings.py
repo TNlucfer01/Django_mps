@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ["*"] # no issue since im at the testing
 # Application definition
 
 INSTALLED_APPS = [
+    "jazzmin",
     "django.contrib.admin" , # for creating and manage the users
     "django.contrib.auth" , # controlling the usets
     "django.contrib.contenttypes" , # for genric refrence to the db 
@@ -42,6 +43,8 @@ INSTALLED_APPS = [
     "cart" ,
     "orders" ,
     "reviews" ,
+    "tailwind" ,
+    "theme" ,
 ]
 
 
@@ -93,7 +96,7 @@ import dj_database_url
 # Database
 # https://docs.djangoproject.com/en/6.0/ref/settings/#databases
 
-DATABASE_URL = os.environ.get("DATABASE_URL")
+DATABASE_URL = os.environ.get("DATABASE_URLa")
 
 if DATABASE_URL:
     DATABASES = {
@@ -160,3 +163,65 @@ MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
 CART_SESSION_ID = "cart"
+
+TAILWIND_APP_NAME = 'theme'
+
+INTERNAL_IPS = [
+    "127.0.0.1",
+]
+
+JAZZMIN_SETTINGS = {
+    "site_title": "Vajra Admin",
+    "site_header": "Vajra",
+    "site_brand": "Vajra",
+    "welcome_sign": "Welcome to Vajra Management",
+    "copyright": "Vajra Ltd",
+    "search_model": ["auth.User", "products.Product"],
+    "show_sidebar": True,
+    "navigation_expanded": True,
+    "order_with_respect_to": ["auth", "products", "orders", "cart"],
+    "icons": {
+        "auth": "fas fa-users-cog",
+        "auth.user": "fas fa-user",
+        "auth.Group": "fas fa-users",
+        "products.Product": "fas fa-box",
+        "products.Category": "fas fa-tags",
+        "orders.Order": "fas fa-shopping-cart",
+        "cart.Cart": "fas fa-trash",
+    },
+    "default_icon_parents": "fas fa-chevron-circle-right",
+    "default_icon_children": "fas fa-circle",
+    "changeform_format": "horizontal_tabs",
+}
+
+JAZZMIN_UI_TWEAKS = {
+    "navbar_small_text": False,
+    "footer_small_text": False,
+    "body_small_text": False,
+    "brand_small_text": False,
+    "brand_colour": "navbar-primary",
+    "accent": "accent-primary",
+    "navbar": "navbar-dark",
+    "no_navbar_border": False,
+    "navbar_fixed": False,
+    "layout_boxed": False,
+    "footer_fixed": False,
+    "sidebar_fixed": False,
+    "sidebar": "sidebar-dark-primary",
+    "sidebar_nav_small_text": False,
+    "sidebar_disable_expand": False,
+    "sidebar_nav_child_indent": False,
+    "sidebar_nav_compact_style": False,
+    "sidebar_nav_legacy_style": False,
+    "sidebar_nav_flat_style": False,
+    "theme": "pulse",
+    "dark_mode_theme": None,
+    "button_classes": {
+        "primary": "btn-primary",
+        "secondary": "btn-secondary",
+        "info": "btn-info",
+        "warning": "btn-warning",
+        "danger": "btn-danger",
+        "success": "btn-success"
+    }
+}
