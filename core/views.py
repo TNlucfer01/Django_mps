@@ -25,3 +25,12 @@ def contact(request):
         messages.success(request, f"Thank you {name}! Your message has been sent.")
         return render(request, "core/contact.html")
     return render(request, "core/contact.html")
+
+
+def partnership(request):
+    if request.method == "POST":
+        business_name = request.POST.get("business_name")
+        contact_person = request.POST.get("contact_person")
+        messages.success(request, f"Thank you {contact_person}! Your partnership inquiry for {business_name} has been received. We will contact you shortly.")
+        return render(request, "core/partnership.html")
+    return render(request, "core/partnership.html")

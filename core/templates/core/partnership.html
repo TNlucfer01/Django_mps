@@ -1,0 +1,195 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Partnership Program - GPZ Store{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<section class="bg-slate-950 bg-gradient-to-br from-[#1E293B] via-[#0F172A] to-[#020617] text-white py-24 lg:py-36 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-20">
+        <div class="absolute top-0 right-0 w-[500px] h-[500px] bg-primary rounded-full blur-[120px]"></div>
+        <div class="absolute bottom-0 left-0 w-[500px] h-[500px] bg-blue-600 rounded-full blur-[120px]"></div>
+    </div>
+    <div class="container mx-auto px-6 relative z-10 text-center">
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-white/5 backdrop-blur-md border border-white/20 mb-8 animate-in fade-in slide-in-from-bottom duration-700">
+            <span class="text-primary-focus">🤝</span>
+            <span class="text-[10px] md:text-xs font-black tracking-[0.2em] uppercase text-white/90">Growth Opportunity</span>
+        </div>
+        <h1 class="text-5xl lg:text-7xl font-black mb-6 tracking-tight uppercase italic leading-none animate-in fade-in slide-in-from-bottom duration-1000">
+            <span class="text-white">GPZ</span> <span class="text-primary italic">Partnership</span>
+        </h1>
+        <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto font-medium leading-relaxed animate-in fade-in slide-in-from-bottom duration-1000 delay-200">
+            Join South India's fastest-growing business network. Scale your venture with premium inventory and priority support.
+        </p>
+    </div>
+</section>
+
+<!-- Stats Grid -->
+<section class="py-12 bg-base-100 border-b border-base-200">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-8">
+            <div class="text-center space-y-2">
+                <p class="text-4xl font-black text-primary tracking-tighter">50+</p>
+                <p class="text-xs font-bold uppercase opacity-40">Active Partners</p>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-4xl font-black text-primary tracking-tighter">24h</p>
+                <p class="text-xs font-bold uppercase opacity-40">Dispatch Time</p>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-4xl font-black text-primary tracking-tighter">100%</p>
+                <p class="text-xs font-bold uppercase opacity-40">Genuine Stock</p>
+            </div>
+            <div class="text-center space-y-2">
+                <p class="text-4xl font-black text-primary tracking-tighter">VIP</p>
+                <p class="text-xs font-bold uppercase opacity-40">Support Queue</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Inquiry Section -->
+<section class="py-24 bg-base-100 overflow-hidden relative">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 lg:grid-cols-12 gap-20 items-start">
+            <!-- Form Card -->
+            <div class="lg:col-span-7 bg-base-100 p-8 md:p-16 rounded-[4rem] border border-base-200 shadow-2xl relative z-10 transition-all hover:shadow-primary/5">
+                <div class="space-y-4 mb-12">
+                    <h2 class="text-4xl font-black tracking-tight tracking-tighter uppercase italic">Business Identity</h2>
+                    <p class="text-base-content/50 font-medium">Tell us about your venture and how we can grow together.</p>
+                </div>
+
+                <form method="post" class="space-y-8">
+                    {% csrf_token %}
+                    
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black text-[12px] uppercase tracking-widest text-base-content/60">Business Name <span class="text-error">*</span></span></label>
+                            <input type="text" name="business_name" placeholder="Enter Company Name" class="input input-bordered rounded-2xl bg-base-200/50 border-none h-16 px-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all" required />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black text-[12px] uppercase tracking-widest text-base-content/60">Contact Person <span class="text-error">*</span></span></label>
+                            <input type="text" name="contact_person" placeholder="Your Full Name" class="input input-bordered rounded-2xl bg-base-200/50 border-none h-16 px-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all" required />
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black text-[12px] uppercase tracking-widest text-base-content/60">WhatsApp Number <span class="text-error">*</span></span></label>
+                            <input type="tel" name="phone_number" placeholder="+91 00000 00000" class="input input-bordered rounded-2xl bg-base-200/50 border-none h-16 px-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all" required />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black text-[12px] uppercase tracking-widest text-base-content/60">Email Address <span class="text-error">*</span></span></label>
+                            <input type="email" id="emailInput" name="email" placeholder="business@example.com" class="input input-bordered rounded-2xl bg-base-200/50 border-none h-16 px-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all" required />
+                            <label class="label hidden" id="emailError">
+                                <span class="label-text-alt text-error font-medium">Please enter a professional email</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label"><span class="label-text font-black text-[12px] uppercase tracking-widest text-base-content/60">Business Type</span></label>
+                        <select name="business_type" class="select select-bordered rounded-2xl bg-base-200/50 border-none h-16 px-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all">
+                            <option disabled selected>Select Category</option>
+                            <option>Retail Electronics</option>
+                            <option>Physical Retail Store</option>
+                            <option>Online Marketplace</option>
+                            <option>Wholesale / Distributor</option>
+                            <option>Corporate Gifting</option>
+                        </select>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label"><span class="label-text font-black text-[12px] uppercase tracking-widest text-base-content/60">Brief Inquiry <span class="text-error">*</span></span></label>
+                        <textarea name="message" class="textarea textarea-bordered rounded-[2rem] bg-base-200/50 border-none h-48 px-6 pt-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all" placeholder="Tell us about your business reach and requirements..." required></textarea>
+                    </div>
+
+                    <button type="submit" id="submitBtn" class="btn btn-primary btn-lg rounded-full w-full h-20 shadow-2xl shadow-primary/20 font-black tracking-tight uppercase group">
+                        <span>Submit Inquiry</span>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:translate-x-1 transition-transform ml-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                        </svg>
+                    </button>
+                    
+                    <p class="text-center text-[11px] font-bold uppercase tracking-widest opacity-30">
+                        Secure Submission &bull; VIP response within 12 hours
+                    </p>
+                </form>
+            </div>
+
+            <!-- Content Column -->
+            <div class="lg:col-span-5 space-y-12 lg:sticky lg:top-32">
+                <div class="space-y-6">
+                    <h3 class="text-3xl font-black tracking-tight tracking-tighter uppercase italic">Why partner with GPZ?</h3>
+                    <p class="text-lg text-base-content/60 font-medium leading-relaxed">We don't just supply products; we power business ecosystems across Tamil Nadu.</p>
+                </div>
+
+                <div class="space-y-10">
+                    <div class="flex gap-6">
+                        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="font-black text-lg tracking-tight uppercase italic">Priority Inventory</p>
+                            <p class="text-sm text-base-content/50 font-medium">First access to limited edition products and next-gen essentials.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="flex gap-6">
+                        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="font-black text-lg tracking-tight uppercase italic">Verified Authenticity</p>
+                            <p class="text-sm text-base-content/50 font-medium">Serial-checked genuine products with valid warranty support.</p>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-6">
+                        <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                        </div>
+                        <div class="space-y-1">
+                            <p class="font-black text-lg tracking-tight uppercase italic">Marketing Support</p>
+                            <p class="text-sm text-base-content/50 font-medium">Access to high-res media kits and regional promotional banners.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="bg-base-200/50 p-8 rounded-[3rem] border border-base-300">
+                    <p class="text-sm font-bold opacity-40 uppercase tracking-widest mb-4">Direct Support</p>
+                    <p class="text-lg font-black tracking-tight mb-2 italic">partners@gpzstore.com</p>
+                    <p class="text-sm font-medium text-base-content/60">+91 98XXX XXXX7 (Partnership Desk)</p>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Decorative background elements -->
+    <div class="absolute top-1/2 left-0 w-96 h-96 bg-primary/5 rounded-full blur-[100px] pointer-events-none"></div>
+</section>
+
+<script>
+    const emailInput = document.getElementById('emailInput');
+    const emailError = document.getElementById('emailError');
+    const submitBtn = document.getElementById('submitBtn');
+
+    emailInput.addEventListener('input', function() {
+        const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (this.value && !emailPattern.test(this.value)) {
+            emailError.classList.remove('hidden');
+            this.classList.add('input-error');
+        } else {
+            emailError.classList.add('hidden');
+            this.classList.remove('input-error');
+        }
+    });
+
+    document.querySelector('form').addEventListener('submit', function() {
+        if (!submitBtn.classList.contains('loading')) {
+            submitBtn.classList.add('loading');
+            submitBtn.querySelector('span').innerText = 'Processing...';
+        }
+    });
+</script>
+{% endblock %}
