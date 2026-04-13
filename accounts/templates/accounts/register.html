@@ -1,33 +1,76 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Register{% endblock %}
+{% block title %}Join the Community - Your Shop Name{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <div class="row justify-content-center">
-        <div class="col-md-6">
-            <h2>Create an Account</h2>
-            
-            <form method="post">
-                {% csrf_token %}
-                {% for field in form %}
-                    <div class="mb-3">
-                        <label>{{ field.label_tag }}</label>
-                        {{ field }}
-                        {% if field.errors %}
-                            <div class="text-danger">
-                                {% for error in field.errors %}
-                                    {{ error }}
-                                {% endfor %}
-                            </div>
-                        {% endif %}
+<section class="min-h-[80vh] py-20 flex items-center justify-center bg-base-100 relative overflow-hidden">
+    <!-- Background Decor -->
+    <div class="absolute inset-x-0 top-0 h-[600px] bg-gradient-to-b from-primary/10 to-transparent"></div>
+    <div class="absolute -top-48 -left-48 w-[500px] h-[500px] bg-primary/20 rounded-full blur-[150px]"></div>
+    <div class="absolute -bottom-48 -right-48 w-[500px] h-[500px] bg-[#2563EB]/10 rounded-full blur-[150px]"></div>
+
+    <div class="container mx-auto px-6 relative z-10">
+        <div class="max-w-2xl mx-auto">
+            <!-- Auth Card -->
+            <div class="bg-base-100 p-10 md:p-16 rounded-[4rem] border border-base-200 shadow-2xl shadow-base-200 relative animate-in slide-in-from-bottom duration-700">
+                <div class="absolute -top-12 -left-12 w-24 h-24 bg-primary/40 rounded-full blur-3xl"></div>
+                
+                <div class="space-y-12 relative z-10">
+                    <div class="text-center space-y-4">
+                        <div class="inline-block px-4 py-1.5 rounded-full bg-primary/5 text-primary text-[10px] font-black uppercase tracking-[0.2em] border border-primary/20 mb-4">
+                            New Membership
+                        </div>
+                        <h2 class="text-5xl font-black tracking-tighter leading-none italic text-slate-950 uppercase">Start Journey</h2>
+                        <p class="text-base-content/50 font-medium tracking-tight">Create your account for a personalized experience</p>
                     </div>
-                {% endfor %}
-                <button type="submit" class="btn btn-primary">Register</button>
-            </form>
-            
-            <p class="mt-3">Already have an account? <a href="{% url 'accounts:login' %}">Login here</a></p>
+                    
+                    <form method="post" class="space-y-8">
+                        {% csrf_token %}
+                        <div class="space-y-6">
+                            {% for field in form %}
+                            <div class="form-control w-full">
+                                <label class="label">
+                                    <span class="label-text font-black uppercase tracking-widest text-[10px]">{{ field.label }}</span>
+                                </label>
+                                <div class="relative group">
+                                    <!-- Render field with custom classes via template filter (assuming you have one, if not we'll just style the container) -->
+                                    <div class="[&>input]:input [&>input]:input-lg [&>input]:w-full [&>input]:bg-base-200/50 [&>input]:border-base-300 [&>input]:rounded-[1.25rem] [&>input]:font-bold [&>input]:focus:bg-white [&>input]:focus:border-primary [&>input]:transition-all
+                                             [&>select]:select [&>select]:select-lg [&>select]:w-full [&>select]:bg-base-200/50 [&>select]:border-base-300 [&>select]:rounded-[1.25rem] [&>select]:font-bold [&>select]:focus:bg-white [&>select]:focus:border-primary [&>select]:transition-all">
+                                        {{ field }}
+                                    </div>
+                                </div>
+                                {% if field.errors %}
+                                <div class="mt-2 space-y-1">
+                                    {% for error in field.errors %}
+                                    <p class="text-[10px] font-black uppercase tracking-widest text-error px-2">{{ error }}</p>
+                                    {% endfor %}
+                                </div>
+                                {% endif %}
+                                {% if field.help_text %}
+                                <p class="text-[10px] font-medium opacity-30 px-2 mt-2 leading-tight uppercase tracking-widest">{{ field.help_text|safe }}</p>
+                                {% endif %}
+                            </div>
+                            {% endfor %}
+                        </div>
+                        
+                        <div class="pt-6">
+                            <button type="submit" class="btn btn-primary btn-lg btn-block h-20 rounded-[1.5rem] shadow-2xl shadow-primary/20 font-black text-xl tracking-tight uppercase group italic">
+                                Create Account
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                </svg>
+                            </button>
+                        </div>
+                    </form>
+                    
+                    <div class="text-center pt-8 border-t border-base-200">
+                        <p class="text-[10px] font-black uppercase tracking-[0.2em] opacity-30 mb-4">Already a member?</p>
+                        <a href="{% url 'accounts:login' %}" class="btn btn-ghost rounded-full font-bold px-12 hover:bg-primary/5 hover:text-primary uppercase tracking-tight">Login Now</a>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

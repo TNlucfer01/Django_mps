@@ -1,5 +1,5 @@
 """
-WSGI config for Vajra project.
+WSGI config for tes project.
 
 It exposes the WSGI callable as a module-level variable named ``application``.
 
@@ -11,7 +11,7 @@ import os
 # its a server btw the webserve rand the django application 
 from django.core.wsgi import get_wsgi_application
 
-os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Vajra.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tes.settings")
 
 application = get_wsgi_application()
 

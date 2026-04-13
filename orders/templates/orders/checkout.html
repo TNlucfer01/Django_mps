@@ -1,80 +1,135 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}Checkout{% endblock %}
+{% block title %}Checkout - Your Shop Name{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1>Checkout</h1>
-    
-    <div class="row">
-        <div class="col-md-8">
-            <h3>Shipping Information</h3>
-            <form method="post">
-                {% csrf_token %}
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>First Name</label>
-                        <input type="text" name="first_name" class="form-control" required>
+<!-- Page Header -->
+<section class="bg-gradient-to-br from-[#7C3AED] via-[#4F46E5] to-[#2563EB] text-white py-16 lg:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
+    </div>
+    <div class="container mx-auto px-6 relative z-10 text-center animate-in slide-in-from-bottom duration-700">
+        <h1 class="text-4xl lg:text-5xl font-black mb-4 tracking-tight uppercase">Checkout</h1>
+        <p class="text-lg text-white/80 font-medium uppercase tracking-widest text-[10px]">Complete your order information</p>
+    </div>
+</section>
+
+<section class="py-20 bg-base-100">
+    <div class="container mx-auto px-6">
+        <div class="grid grid-cols-1 xl:grid-cols-12 gap-16">
+            <!-- Checkout Form -->
+            <div class="xl:col-span-8 bg-base-100 p-8 md:p-12 rounded-[3.5rem] border border-base-200 shadow-2xl shadow-base-200/50">
+                <div class="flex items-center gap-4 mb-12">
+                    <div class="w-12 h-1 bg-primary rounded-full"></div>
+                    <h3 class="text-3xl font-black tracking-tight uppercase">Shipping Information</h3>
+                </div>
+                
+                <form method="post" class="space-y-8">
+                    {% csrf_token %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">First Name</span></label>
+                            <input type="text" name="first_name" placeholder="John" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Last Name</span></label>
+                            <input type="text" name="last_name" placeholder="Doe" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
                     </div>
-                    <div class="col-md-6 mb-3">
-                        <label>Last Name</label>
-                        <input type="text" name="last_name" class="form-control" required>
+
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Email Address</span></label>
+                            <input type="email" name="email" placeholder="john@example.com" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Phone Number</span></label>
+                            <input type="text" name="phone" placeholder="+1 (234) 567-890" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Street Address</span></label>
+                        <textarea name="address" class="textarea textarea-bordered rounded-[1.5rem] bg-base-200/50 border-base-300 focus:border-primary transition-all h-24 w-full" placeholder="123 Shop Street" required></textarea>
+                    </div>
+
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">City</span></label>
+                            <input type="text" name="city" placeholder="City" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">State</span></label>
+                            <input type="text" name="state" placeholder="State" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
+                        <div class="form-control w-full">
+                            <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Postal Code</span></label>
+                            <input type="text" name="postal_code" placeholder="12345" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                        </div>
+                    </div>
+
+                    <div class="form-control w-full">
+                        <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Country</span></label>
+                        <input type="text" name="country" placeholder="United States" class="input input-bordered rounded-[1.25rem] bg-base-200/50 border-base-300 focus:border-primary transition-all w-full" required />
+                    </div>
+
+                    <div class="pt-8">
+                        <button type="submit" class="btn btn-primary btn-lg rounded-full px-16 shadow-2xl shadow-primary/20 font-black tracking-tight uppercase group h-20">
+                            Confirm Order
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                            </svg>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Order Summary -->
+            <div class="xl:col-span-4 space-y-10 animate-in slide-in-from-right duration-700">
+                <div class="bg-slate-950 p-10 rounded-[3rem] text-white shadow-2xl space-y-10 relative overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-br from-primary/20 to-transparent pointer-events-none"></div>
+                    
+                    <h3 class="text-3xl font-black tracking-tight uppercase relative z-10">Summary</h3>
+                    
+                    <div class="space-y-6 relative z-10">
+                        {% for item in cart %}
+                        <div class="flex justify-between items-start group">
+                            <div class="space-y-1">
+                                <p class="font-bold text-sm tracking-tight leading-tight group-hover:text-primary transition-colors">{{ item.product.name }}</p>
+                                <p class="text-[10px] font-black opacity-30 uppercase tracking-widest">Qty: {{ item.quantity }}</p>
+                            </div>
+                            <span class="font-bold text-sm text-primary-content tracking-tighter">${{ item.total_price }}</span>
+                        </div>
+                        <div class="h-px bg-white/5 w-full"></div>
+                        {% endfor %}
+                    </div>
+
+                    <div class="flex justify-between items-center text-primary pt-6 relative z-10">
+                        <span class="font-black uppercase tracking-widest text-xs">Final Total</span>
+                        <span class="text-4xl font-bold tracking-tighter italic text-white">${{ cart.get_total_price }}</span>
+                    </div>
+                    
+                    <div class="bg-white/5 p-6 rounded-3xl space-y-4 border border-white/10 mt-10 relative z-10">
+                        <div class="flex items-center gap-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-primary" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <span class="text-[10px] font-black uppercase tracking-widest text-white/40">Secure Transaction</span>
+                        </div>
+                        <p class="text-[10px] font-medium opacity-50 leading-relaxed uppercase tracking-wider">Your order will be processed securely. By proceeding, you agree to our Terms of Service.</p>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-md-6 mb-3">
-                        <label>Email</label>
-                        <input type="email" name="email" class="form-control" required>
-                    </div>
-                    <div class="col-md-6 mb-3">
-                        <label>Phone</label>
-                        <input type="text" name="phone" class="form-control" required>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label>Address</label>
-                    <textarea name="address" class="form-control" rows="2" required></textarea>
-                </div>
-                <div class="row">
-                    <div class="col-md-4 mb-3">
-                        <label>City</label>
-                        <input type="text" name="city" class="form-control" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label>State</label>
-                        <input type="text" name="state" class="form-control" required>
-                    </div>
-                    <div class="col-md-4 mb-3">
-                        <label>Postal Code</label>
-                        <input type="text" name="postal_code" class="form-control" required>
-                    </div>
-                </div>
-                <div class="mb-3">
-                    <label>Country</label>
-                    <input type="text" name="country" class="form-control" required>
-                </div>
-                <button type="submit" class="btn btn-success btn-lg">Place Order</button>
-            </form>
-        </div>
-        
-        <div class="col-md-4">
-            <h3>Order Summary</h3>
-            <div class="card">
-                <div class="card-body">
-                    {% for item in cart %}
-                    <div class="d-flex justify-content-between">
-                        <span>{{ item.product.name }} x {{ item.quantity }}</span>
-                        <span>${{ item.total_price }}</span>
-                    </div>
-                    {% endfor %}
-                    <hr>
-                    <div class="d-flex justify-content-between">
-                        <strong>Total:</strong>
-                        <strong>${{ cart.get_total_price }}</strong>
-                    </div>
-                </div>
+                
+                <a href="{% url 'cart:cart_detail' %}" class="btn btn-ghost btn-block rounded-full font-bold uppercase tracking-widest text-[10px] gap-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    Edit Cart Items
+                </a>
             </div>
         </div>
     </div>
-</div>
+</section>
 {% endblock %}

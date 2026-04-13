@@ -2,7 +2,7 @@ from django.db import models
 from django.conf import settings
 from products.models import Product
 
-
+# just pass the models as the pararment then after hat define  multipchoice you want then after tht use the foreign key response then this is what happened
 class Order(models.Model):
     STATUS_CHOICES = [
         ("pending", "Pending"),
@@ -29,14 +29,14 @@ class Order(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
-    class Meta:
+    class Meta: # what does this even do 
         ordering = ["-created_at"]
 
-    def __str__(self):
+    def __str__(self): # this is a constructor right  fo rteuser  maping 
         return f"Order #{self.id} - {self.user.username}"
 
 
-class OrderItem(models.Model):
+class OrderItem(models.Model): # now the thign is what is this and how does these values are stored on the database
     order = models.ForeignKey(Order, on_delete=models.CASCADE, related_name="items")
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     price = models.DecimalField(max_digits=10, decimal_places=2)

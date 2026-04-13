@@ -9,7 +9,7 @@ venv/
 env/
 ENV/
 .venv
-
+.env
 # IDE settings
 .vscode/
 .idea/

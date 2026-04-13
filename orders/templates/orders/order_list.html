@@ -1,38 +1,87 @@
-{% extends "base.html" %}
+{% extends 'base.html' %}
+{% load static %}
 
-{% block title %}My Orders{% endblock %}
+{% block title %}My Orders - Your Shop Name{% endblock %}
 
 {% block content %}
-<div class="container mt-4">
-    <h1>My Orders</h1>
-    
-    {% if not orders %}
-    <div class="alert alert-info">
-        You haven't placed any orders yet. <a href="{% url 'products:product_list' %}">Start shopping</a>
+<!-- Page Header -->
+<section class="bg-gradient-to-br from-[#7C3AED] via-[#4F46E5] to-[#2563EB] text-white py-16 lg:py-20 relative overflow-hidden">
+    <div class="absolute inset-0 opacity-10">
+        <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
+        <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
-    {% else %}
-    <table class="table table-striped">
-        <thead>
-            <tr>
-                <th>Order #</th>
-                <th>Date</th>
-                <th>Total</th>
-                <th>Status</th>
-                <th>Actions</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for order in orders %}
-            <tr>
-                <td>{{ order.id }}</td>
-                <td>{{ order.created_at|date:"F d, Y" }}</td>
-                <td>${{ order.total_amount }}</td>
-                <td><span class="badge bg-{% if order.status == 'delivered' %}success{% elif order.status == 'cancelled' %}danger{% else %}warning{% endif %}">{{ order.status }}</span></td>
-                <td><a href="{% url 'orders:order_detail' order.id %}" class="btn btn-sm btn-outline-primary">View</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-    {% endif %}
-</div>
+    <div class="container mx-auto px-6 relative z-10 text-center animate-in slide-in-from-bottom duration-700">
+        <h1 class="text-4xl lg:text-5xl font-black mb-4 tracking-tight uppercase">Order History</h1>
+        <p class="text-lg text-white/80 font-medium uppercase tracking-widest text-[10px]">Track your purchases and status</p>
+    </div>
+</section>
+
+<section class="py-20 bg-base-100">
+    <div class="container mx-auto px-6">
+        {% if not orders %}
+        <div class="max-w-2xl mx-auto text-center space-y-8 bg-base-200/50 p-20 rounded-[3rem] border-4 border-dashed border-base-200">
+            <div class="w-24 h-24 mx-auto rounded-full bg-base-200 flex items-center justify-center text-base-content/10">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2" />
+                </svg>
+            </div>
+            <div class="space-y-4">
+                <h2 class="text-3xl font-black tracking-tight">No orders yet</h2>
+                <p class="text-base-content/60 font-medium">You haven't placed any orders in our store.</p>
+            </div>
+            <a href="{% url 'products:product_list' %}" class="btn btn-primary btn-lg rounded-full px-12 font-bold uppercase tracking-tight">Explore Products</a>
+        </div>
+        {% else %}
+        <div class="max-w-6xl mx-auto space-y-8">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-10 h-1 bg-primary rounded-full"></div>
+                <h3 class="text-2xl font-black tracking-tight uppercase">Recent Purchases</h3>
+            </div>
+            
+            <div class="overflow-x-auto">
+                <table class="table w-full border-separate border-spacing-y-4">
+                    <thead>
+                        <tr class="text-[10px] font-black uppercase tracking-[0.3em] text-base-content/40 border-none">
+                            <th class="bg-transparent pl-8">Order ID</th>
+                            <th class="bg-transparent">Placement Date</th>
+                            <th class="bg-transparent text-center">Amount</th>
+                            <th class="bg-transparent text-center">Current Status</th>
+                            <th class="bg-transparent text-right pr-8">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="space-y-4">
+                        {% for order in orders %}
+                        <tr class="bg-base-200/30 hover:bg-base-200 transition-colors rounded-[2rem] overflow-hidden">
+                            <td class="pl-10 py-8 rounded-l-[2rem] font-black text-xl tracking-tighter">
+                                #{{ order.id }}
+                            </td>
+                            <td class="font-bold opacity-60">
+                                {{ order.created_at|date:"F d, Y" }}
+                            </td>
+                            <td class="text-center font-black text-xl text-primary tracking-tighter">
+                                ${{ order.total_amount }}
+                            </td>
+                            <td class="text-center">
+                                <span class="badge badge-lg py-4 px-6 rounded-xl font-bold border-none uppercase tracking-widest text-[10px] 
+                                    {% if order.status == 'delivered' %}bg-success/10 text-success{% elif order.status == 'cancelled' %}bg-error/10 text-error{% else %}bg-warning/10 text-warning{% endif %}">
+                                    {{ order.status }}
+                                </span>
+                            </td>
+                            <td class="pr-10 text-right rounded-r-[2rem]">
+                                <a href="{% url 'orders:order_detail' order.id %}" class="btn btn-circle btn-ghost border border-base-300 hover:bg-primary hover:text-white transition-all">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                                    </svg>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</section>
 {% endblock %}
