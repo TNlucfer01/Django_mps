@@ -1,7 +1,7 @@
 # Agent Guidelines for django_Learn
 
 ## Project Overview
-- **Project**: Vajra (Django Learning Project)
+- **Project**: tes (Django Learning Project)
 - **Framework**: Django 6.0.3
 - **Database**: SQLite (db.sqlite3)
 - **Virtual Environment**: Dvenv/
@@ -13,7 +13,7 @@ django_Learn/
 ├── manage.py              # Django management script
 ├── db.sqlite3             # SQLite database
 ├── Dvenv/                 # Virtual environment
-├── Vajra/                 # Main Django project
+├── tes/                 # Main Django project
 │   ├── settings.py        # Settings configuration
 │   ├── urls.py            # Root URL configuration
 │   ├── wsgi.py            # WSGI application

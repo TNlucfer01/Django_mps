@@ -1,6 +1,6 @@
 # Development Changelog
 
-All notable changes to the django_Learn (Vajra) project are documented here.
+All notable changes to the django_Learn (tes) project are documented here.
 
 ## [Unreleased]
 
@@ -42,7 +42,7 @@ All notable changes to the django_Learn (Vajra) project are documented here.
 
 ### 2026-04-06 - Initial Setup
 - Initial project setup with Django 6.0.3
-- Created `Vajra` main project
+- Created `tes` main project
 - Created `accounts` app with basic structure
 - Configured SQLite database (db.sqlite3)
 - Set up virtual environment (Dvenv/) with Python 3.13

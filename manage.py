@@ -7,7 +7,7 @@ import sys
 
 def main():
     """Run administrative tasks."""
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "Vajra.settings") #set the setting here 
+    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tes.settings") #set the setting here 
     try:
         from django.core.management import execute_from_command_line # why  this is line needed 
     except ImportError as exc:
