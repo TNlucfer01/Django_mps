@@ -41,7 +41,7 @@ def checkout(request):
         state = request.POST.get("state")
         postal_code = request.POST.get("postal_code")
         country = request.POST.get("country")
-        payment_method = request.POST.get("payment_method", "upi")
+        payment_method = request.POST.get("payment_method", "upi_qr")
         utr_number = request.POST.get("utr_number")
         payment_screenshot = request.FILES.get("payment_screenshot")
 
@@ -86,7 +86,9 @@ def checkout(request):
             products_list = []
             for item in items:
                 p = item.product
-                products_list.append(f"{p.name} (SKU: {p.sku}, Brand: {p.brand}) - Qty: {item.quantity}")
+                sku_str = p.sku or "N/A"
+                brand_str = p.brand or "N/A"
+                products_list.append(f"{p.name} (SKU: {sku_str}, Brand: {brand_str}) - Qty: {item.quantity}")
             products_str = " | ".join(products_list)
         except Exception:
             pass

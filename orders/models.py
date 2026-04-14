@@ -26,7 +26,11 @@ class Order(models.Model):
     country = models.CharField(max_length=100)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
-    payment_method = models.CharField(max_length=50, default="cod")
+    PAYMENT_CHOICES = [
+        ("upi_qr", "UPI QR"),
+    ]
+
+    payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default="upi_qr")
     is_paid = models.BooleanField(default=False)
     utr_number = models.CharField(max_length=100, blank=True, null=True)
     payment_screenshot = models.ImageField(upload_to="payment_proofs/", blank=True, null=True)
