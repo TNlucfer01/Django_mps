@@ -82,16 +82,20 @@ def checkout(request):
         # 2. Format the products ordered
         products_str = ""
         try:
-            items = order.items.all()
+            items = list(order.items.all())  # force-evaluate the queryset
+            print(f"\n[DEBUG] Order #{order.id} — items count: {len(items)}")
             products_list = []
             for item in items:
                 p = item.product
                 sku_str = p.sku or "N/A"
                 brand_str = p.brand or "N/A"
-                products_list.append(f"{p.name} (SKU: {sku_str}, Brand: {brand_str}) - Qty: {item.quantity}")
+                line = f"{p.name} (SKU: {sku_str}, Brand: {brand_str}) - Qty: {item.quantity}"
+                print(f"[DEBUG]   → {line}")
+                products_list.append(line)
             products_str = " | ".join(products_list)
-        except Exception:
-            pass
+            print(f"[DEBUG] products_str = '{products_str}'\n")
+        except Exception as e:
+            print(f"[DEBUG] ERROR building products_str: {e}\n")
             
         payload = {
             "order_id":          order.id,
@@ -105,7 +109,7 @@ def checkout(request):
             "postal_code":       order.postal_code,
             "country":           order.country,
             "total_amount":      str(order.total_amount),
-            "products_ordered":  products_str,
+            "products":          products_str,
             "screenshot_url":    screenshot_url,
             "is_paid":           order.is_paid,
             "utr_number":        order.utr_number or "",
