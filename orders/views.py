@@ -28,6 +28,18 @@ def _push_to_sheets(order):
             except Exception:
                 screenshot_url = ""
 
+        # Format the ordered products into a single string
+        products_str = ""
+        try:
+            items = order.items.all()
+            products_list = []
+            for item in items:
+                p = item.product
+                products_list.append(f"{p.name} (SKU: {p.sku}, Brand: {p.brand}) - Qty: {item.quantity}")
+            products_str = " | ".join(products_list)
+        except Exception:
+            pass
+
         payload = {
             "order_id":          order.id,
             "username":          order.user.username,
@@ -40,6 +52,7 @@ def _push_to_sheets(order):
             "postal_code":       order.postal_code,
             "country":           order.country,
             "total_amount":      str(order.total_amount),
+            "products_ordered":  products_str,
             "screenshot_url":    screenshot_url,
             "is_paid":           order.is_paid,
             "utr_number":        order.utr_number or "",
