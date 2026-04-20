@@ -11,3 +11,33 @@
   * the scope of this path.
   */
 @source "../../../**/*.{html,py,js}";
+
+@theme {
+  --color-primary-gradient: linear-gradient(90deg, #807E82 0%, #888889 50%, #959595 100%);
+  --color-secondary-bg: #F3F0F0;
+  
+  --glass-blur: 12px;
+  --glass-opacity: 0.1;
+  --glass-border-opacity: 0.2;
+}
+
+@utility glass-morphism {
+  background: rgba(255, 255, 255, var(--glass-opacity));
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, var(--glass-border-opacity));
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.1);
+}
+
+@utility glass-morphism-dark {
+  background: rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(var(--glass-blur));
+  -webkit-backdrop-filter: blur(var(--glass-blur));
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+}
+
+@utility bg-primary-gradient {
+  background: var(--color-primary-gradient);
+}
+

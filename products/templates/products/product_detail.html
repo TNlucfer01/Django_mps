@@ -17,7 +17,7 @@
     </nav>
 
     <!-- Main Product Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-2 gap-16 items-start">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
 
       <!-- Image Gallery -->
       <div class="space-y-4">
@@ -37,7 +37,7 @@
         <div class="grid grid-cols-4 gap-3">
           {% for url in product.image_gallery %}
           <button onclick="document.getElementById('main-image').src='{{ url }}'"
-                  class="rounded-2xl overflow-hidden aspect-square bg-base-200 border-2 border-transparent hover:border-primary transition-all">
+                  class="rounded-2xl overflow-hidden aspect-square bg-base-200 border-2 border-transparent hover:border-gray-400 transition-all">
             <img src="{{ url }}" alt="Gallery" class="w-full h-full object-cover"/>
           </button>
           {% endfor %}
@@ -49,7 +49,7 @@
       <div class="space-y-8">
         <!-- Badge Row -->
         <div class="flex flex-wrap items-center gap-3">
-          {% if product.brand %}<span class="badge badge-primary rounded-xl font-black uppercase tracking-widest text-[10px] px-4 py-3">{{ product.brand }}</span>{% endif %}
+          {% if product.brand %}<span class="badge bg-primary-gradient border-none text-white rounded-xl font-black uppercase tracking-widest text-[10px] px-4 py-3">{{ product.brand }}</span>{% endif %}
           <span class="badge {% if product.availability_status == 'In Stock' %}badge-success{% elif product.availability_status == 'Out of Stock' %}badge-error{% else %}badge-warning{% endif %} rounded-xl font-black uppercase tracking-widest text-[10px] px-4 py-3">
             {{ product.availability_status }}
           </span>
@@ -58,7 +58,7 @@
 
         <div class="space-y-2">
           {% if product.model_number %}<p class="text-[10px] font-black opacity-30 uppercase tracking-[0.2em]">Model: {{ product.model_number }}</p>{% endif %}
-          <h1 class="text-4xl lg:text-5xl font-black tracking-tighter leading-tight">{{ product.name }}</h1>
+          <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-tight">{{ product.name }}</h1>
           {% if product.short_description %}<p class="text-base opacity-60 leading-relaxed">{{ product.short_description }}</p>{% endif %}
         </div>
 
@@ -80,7 +80,7 @@
 
         <!-- Price -->
         <div class="space-y-1">
-          <p class="text-5xl font-black tracking-tighter text-primary">₹{{ product.price }}</p>
+          <p class="text-5xl font-black tracking-tighter text-gray-700">₹{{ product.price }}</p>
           {% if product.is_on_sale %}
           <p class="text-lg line-through opacity-30 font-medium">₹{{ product.original_price }} <span class="text-error no-underline">You save ₹{{ product.original_price|floatformat:"0" }}</span></p>
           {% endif %}
@@ -91,7 +91,7 @@
         {% if product.tags.all %}
         <div class="flex flex-wrap gap-2">
           {% for tag in product.tags.all %}
-          <a href="{% url 'products:product_list' %}?tag={{ tag.slug }}" class="badge badge-ghost rounded-xl border border-base-300 px-3 py-3 text-[10px] font-black uppercase hover:border-primary hover:text-primary transition-colors">{{ tag.name }}</a>
+          <a href="{% url 'products:product_list' %}?tag={{ tag.slug }}" class="badge badge-ghost rounded-xl border border-base-300 px-3 py-3 text-[10px] font-black uppercase hover:border-gray-500 hover:text-gray-600 transition-colors">{{ tag.name }}</a>
           {% endfor %}
         </div>
         {% endif %}
@@ -104,7 +104,7 @@
         <form action="{{ product.get_add_to_cart_url }}" method="post" class="flex gap-4 pt-4">
           {% csrf_token %}
           <input type="hidden" name="quantity" value="1">
-          <button type="submit" class="btn btn-primary btn-lg rounded-[1.5rem] flex-1 h-20 text-xl font-black uppercase shadow-2xl shadow-primary/20 hover:scale-[1.02] transition-transform">
+          <button type="submit" class="btn bg-primary-gradient border-none text-white btn-lg rounded-[1.5rem] flex-1 h-20 text-xl font-black uppercase shadow-2xl shadow-gray-500/20 hover:scale-[1.02] transition-transform">
             Add to Cart
           </button>
         </form>
@@ -118,7 +118,7 @@
     {% if spec_items %}
     <section class="mt-24 space-y-8">
       <div class="flex items-center gap-4">
-        <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+        <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
         <h2 class="text-3xl font-black tracking-tight uppercase italic">Specifications</h2>
       </div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-2">
@@ -136,7 +136,7 @@
     {% if product.long_description %}
     <section class="mt-24 space-y-8">
       <div class="flex items-center gap-4">
-        <div class="w-1.5 h-10 bg-primary rounded-full"></div>
+        <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
         <h2 class="text-3xl font-black tracking-tight uppercase italic">About This Product</h2>
       </div>
       <div class="prose prose-lg max-w-none text-base-content/70 leading-relaxed">{{ product.long_description }}</div>
@@ -147,11 +147,11 @@
     <section class="mt-24 space-y-12">
       <div class="flex items-center justify-between flex-wrap gap-4">
         <div class="flex items-center gap-4">
-          <div class="w-1.5 h-10 bg-primary rounded-full"></div>
-          <h2 class="text-3xl font-black tracking-tight uppercase italic">Reviews</h2>
+          <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
+          <h2 class="text-2xl md:text-3xl font-black tracking-tight uppercase italic">Reviews</h2>
         </div>
         {% if user.is_authenticated and not user_review %}
-        <a href="#write-review" class="btn btn-outline btn-primary rounded-full font-bold uppercase text-[10px] tracking-widest">Write a Review</a>
+        <a href="#write-review" class="btn btn-outline border-gray-400 text-gray-700 rounded-full font-bold uppercase text-[10px] tracking-widest">Write a Review</a>
         {% endif %}
       </div>
 
@@ -193,7 +193,7 @@
           <div class="flex items-start justify-between gap-4">
             <div class="space-y-1">
               <div class="flex items-center gap-2">
-                <div class="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-black text-sm">{{ review.user.username|first|upper }}</div>
+                <div class="w-8 h-8 rounded-full bg-primary-gradient text-white flex items-center justify-center font-black text-sm">{{ review.user.username|first|upper }}</div>
                 <p class="font-black tracking-tight">{{ review.user.username }}</p>
               </div>
               <div class="rating rating-xs">
@@ -230,19 +230,19 @@
           </div>
           <div class="form-control">
             <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Title</span></label>
-            <input type="text" name="title" maxlength="200" placeholder="Summarize your experience..." class="input input-lg rounded-2xl bg-base-200/50 border-base-300 font-bold focus:border-primary"/>
+            <input type="text" name="title" maxlength="200" placeholder="Summarize your experience..." class="input input-lg rounded-2xl bg-base-200/50 border-base-300 font-bold focus:border-gray-400"/>
           </div>
           <div class="form-control">
             <label class="label"><span class="label-text font-black uppercase tracking-widest text-[10px]">Review</span></label>
-            <textarea name="comment" rows="5" placeholder="Describe your experience in detail..." class="textarea textarea-lg rounded-2xl bg-base-200/50 border-base-300 font-bold focus:border-primary" required></textarea>
+            <textarea name="comment" rows="5" placeholder="Describe your experience in detail..." class="textarea textarea-lg rounded-2xl bg-base-200/50 border-base-300 font-bold focus:border-gray-400" required></textarea>
           </div>
-          <button type="submit" class="btn btn-primary btn-lg rounded-2xl font-black uppercase shadow-2xl shadow-primary/20">Submit Review</button>
+          <button type="submit" class="btn bg-primary-gradient border-none text-white btn-lg rounded-2xl font-black uppercase shadow-2xl shadow-gray-500/20">Submit Review</button>
         </form>
       </div>
       {% elif not user.is_authenticated %}
       <div class="text-center p-10 rounded-[2.5rem] bg-base-200/50 border border-base-200 space-y-4">
         <p class="font-bold opacity-50 uppercase tracking-widest text-sm">Login to write a review</p>
-        <a href="{% url 'accounts:login' %}" class="btn btn-primary rounded-full px-12 font-bold uppercase shadow-xl shadow-primary/20">Login</a>
+        <a href="{% url 'accounts:login' %}" class="btn bg-primary-gradient border-none text-white rounded-full px-12 font-bold uppercase shadow-xl shadow-gray-500/20">Login</a>
       </div>
       {% endif %}
     </section>
@@ -251,8 +251,8 @@
     {% if related_products %}
     <section class="mt-24 space-y-8">
       <div class="flex items-center gap-4">
-        <div class="w-1.5 h-10 bg-primary rounded-full"></div>
-        <h2 class="text-3xl font-black tracking-tight uppercase italic">You Might Also Like</h2>
+        <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
+        <h2 class="text-2xl md:text-3xl font-black tracking-tight uppercase italic">You Might Also Like</h2>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         {% for p in related_products %}
@@ -261,9 +261,9 @@
           <div class="bg-base-200/50 aspect-square overflow-hidden"><img src="{{ p.image.url }}" alt="{{ p.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"/></div>
           {% endif %}
           <div class="p-4 space-y-1">
-            {% if p.brand %}<p class="text-[9px] font-black uppercase text-primary tracking-widest">{{ p.brand }}</p>{% endif %}
+            {% if p.brand %}<p class="text-[9px] font-black uppercase text-gray-500 tracking-widest">{{ p.brand }}</p>{% endif %}
             <p class="font-black text-sm line-clamp-2 leading-tight">{{ p.name }}</p>
-            <p class="font-black text-primary">₹{{ p.price }}</p>
+            <p class="font-black text-gray-700">₹{{ p.price }}</p>
           </div>
         </a>
         {% endfor %}

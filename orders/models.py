@@ -28,12 +28,19 @@ class Order(models.Model):
     status = models.CharField(max_length=20, choices=STATUS_CHOICES, default="pending")
     PAYMENT_CHOICES = [
         ("upi_qr", "UPI QR"),
+        ("razorpay", "Razorpay"),
     ]
 
     payment_method = models.CharField(max_length=50, choices=PAYMENT_CHOICES, default="upi_qr")
     is_paid = models.BooleanField(default=False)
     utr_number = models.CharField(max_length=100, blank=True, null=True)
     payment_screenshot = models.ImageField(upload_to="payment_proofs/", blank=True, null=True)
+    
+    # Razorpay Fields
+    razorpay_order_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_payment_id = models.CharField(max_length=100, blank=True, null=True)
+    razorpay_signature = models.CharField(max_length=200, blank=True, null=True)
+    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

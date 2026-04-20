@@ -4,7 +4,8 @@
 {% block title %}CHECKOUT - GPZ Store{% endblock %}
 
 {% block extra_head %}
-<!-- Include QRCode.js library -->
+<!-- Include Razorpay SDK -->
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -116,89 +117,107 @@
     
     <div class="flex items-center gap-4 text-left">
         <div class="w-1.5 h-8 bg-primary rounded-full"></div>
-        <h2 class="text-2xl font-black tracking-tight uppercase">Scan & Pay via UPI</h2>
+        <h2 class="text-2xl font-black tracking-tight uppercase">Select Payment Method</h2>
+    </div>
+
+    <!-- Payment Method Toggle -->
+    <div class="grid grid-cols-2 gap-4 bg-slate-50 p-2 rounded-3xl border border-slate-200">
+        <button type="button" onclick="setPaymentMethod('upi_qr')" id="btn-upi_qr" class="payment-method-btn py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all bg-white shadow-lg text-primary">
+            UPI QR (Manual)
+        </button>
+        <button type="button" onclick="setPaymentMethod('razorpay')" id="btn-razorpay" class="payment-method-btn py-4 rounded-2xl font-black uppercase text-xs tracking-widest transition-all text-slate-400">
+            Razorpay (Online)
+        </button>
     </div>
 
     <div class="max-w-md mx-auto space-y-10">
         
-        <!-- UPI Payee Display -->
-        <div class="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-200 space-y-4 text-left relative overflow-hidden">
-            <div class="absolute top-0 right-0 p-4 opacity-10">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
-            </div>
-            <div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Merchant Name</p>
-                <p class="text-lg font-black text-slate-900">{{ payee_name }}</p>
-            </div>
-            <div>
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">UPI ID (VPA)</p>
-                <div class="flex items-center gap-2">
-                    <p id="backend-upi-id" class="text-sm font-bold text-primary">{{ upi_id }}</p>
-                    <button type="button" onclick="copyUPI()" class="btn btn-ghost btn-xs rounded-lg hover:bg-primary/10">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
-                    </button>
+        <!-- UPI Specific Section -->
+        <div id="upi-fields" class="space-y-10">
+            <!-- UPI Payee Display -->
+            <div class="bg-slate-50 p-8 rounded-[2.5rem] border border-slate-200 space-y-4 text-left relative overflow-hidden">
+                <div class="absolute top-0 right-0 p-4 opacity-10">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
                 </div>
-            </div>
-            <div class="pt-2">
-                <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Payable Amount</p>
-                <p class="text-2xl font-black italic tracking-tighter text-slate-900">₹<span id="payable-amount">{{ cart.get_total_price }}</span></p>
-            </div>
-        </div>
-
-        <!-- Dynamic QR Code Container -->
-        <div class="space-y-6">
-            <div id="qr_container" class="flex flex-col items-center space-y-4">
-                <div class="relative group">
-                    <div class="absolute -inset-6 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-[3rem] blur-2xl opacity-50"></div>
-                    <div class="bg-white p-6 rounded-[2.5rem] shadow-2xl relative z-10 border-8 border-white mx-auto">
-                        <div id="qrcode"></div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Merchant Name</p>
+                    <p class="text-lg font-black text-slate-900">{{ payee_name }}</p>
+                </div>
+                <div>
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">UPI ID (VPA)</p>
+                    <div class="flex items-center gap-2">
+                        <p id="backend-upi-id" class="text-sm font-bold text-primary">{{ upi_id }}</p>
+                        <button type="button" onclick="copyUPI()" class="btn btn-ghost btn-xs rounded-lg hover:bg-primary/10">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3 w-3" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z" /></svg>
+                        </button>
                     </div>
                 </div>
-                <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] text-center max-w-[260px]">
-                    Scan with any UPI app to pay
-                </p>
-            </div>
-        </div>
-
-        <!-- Payment Proof Upload & Preview -->
-        <div class="space-y-8 pt-8 border-t border-slate-200">
-            <div class="form-control text-left">
-                <label class="label">
-                    <span class="label-text font-black text-[10px] uppercase tracking-widest text-slate-500">
-                        Upload Payment Screenshot <span class="text-error">*</span>
-                    </span>
-                </label>
-                <input type="file" name="payment_screenshot" id="id_payment_screenshot" 
-                       class="file-input file-input-bordered file-input-primary w-full rounded-2xl bg-slate-50 h-16" 
-                       required accept="image/*" onchange="previewScreenshot(event)" />
-            </div>
-
-            <!-- Screenshot Preview Area -->
-            <div id="screenshot-preview-container" class="hidden animate-in fade-in zoom-in duration-300">
-                <div class="relative max-w-[200px] mx-auto group">
-                    <img id="screenshot-preview" src="#" alt="Screenshot Preview" class="rounded-2xl shadow-lg border-4 border-white w-full h-auto" />
-                    <button type="button" onclick="clearScreenshot()" class="absolute -top-2 -right-2 w-8 h-8 bg-error text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" /></svg>
-                    </button>
-                    <div class="absolute bottom-2 left-0 right-0 text-center">
-                        <span class="bg-success/90 backdrop-blur-md text-white text-[8px] font-black uppercase tracking-widest py-1 px-3 rounded-full shadow-lg">Image Selected</span>
-                    </div>
+                <div class="pt-2">
+                    <p class="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-1">Payable Amount</p>
+                    <p class="text-2xl font-black italic tracking-tighter text-slate-900">₹<span id="payable-amount">{{ cart.get_total_price }}</span></p>
                 </div>
             </div>
 
-            <div class="form-control text-left">
-                <label class="label">
-                    <span class="label-text font-black text-[10px] uppercase tracking-widest text-slate-500">
-                        UTR / Transaction Number <span class="text-error">*</span>
-                    </span>
-                </label>
-                <input type="text" name="utr_number" id="id_utr_number" 
-                       placeholder="Enter 12-digit UTR / Reference Number" 
-                       class="input input-bordered h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-primary text-sm font-bold" required />
+            <!-- Dynamic QR Code Container -->
+            <div class="space-y-6">
+                <div id="qr_container" class="flex flex-col items-center space-y-4">
+                    <div class="relative group">
+                        <div class="absolute -inset-6 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-[3rem] blur-2xl opacity-50"></div>
+                        <div class="bg-white p-6 rounded-[2.5rem] shadow-2xl relative z-10 border-8 border-white mx-auto">
+                            <div id="qrcode"></div>
+                        </div>
+                    </div>
+                    <p class="text-[10px] text-slate-500 font-black uppercase tracking-[0.2em] text-center max-w-[260px]">
+                        Scan with any UPI app to pay
+                    </p>
+                </div>
             </div>
 
-            <input type="hidden" name="payment_method" value="upi_qr" />
+            <!-- Payment Proof Upload & Preview -->
+            <div class="space-y-8 pt-8 border-t border-slate-200">
+                <div class="form-control text-left">
+                    <label class="label">
+                        <span class="label-text font-black text-[10px] uppercase tracking-widest text-slate-500">
+                            Upload Payment Screenshot <span class="text-error">*</span>
+                        </span>
+                    </label>
+                    <input type="file" name="payment_screenshot" id="id_payment_screenshot" 
+                           class="file-input file-input-bordered file-input-primary w-full rounded-2xl bg-slate-50 h-16" 
+                           accept="image/*" onchange="previewScreenshot(event)" />
+                </div>
+
+                <div id="screenshot-preview-container" class="hidden animate-in fade-in zoom-in duration-300">
+                    <div class="relative max-w-[200px] mx-auto group">
+                        <img id="screenshot-preview" src="#" alt="Screenshot Preview" class="rounded-2xl shadow-lg border-4 border-white w-full h-auto" />
+                        <button type="button" onclick="clearScreenshot()" class="absolute -top-2 -right-2 w-8 h-8 bg-error text-white rounded-full flex items-center justify-center shadow-lg hover:scale-110 transition-transform">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M6 18L18 6M6 6l12 12" /></svg>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="form-control text-left">
+                    <label class="label">
+                        <span class="label-text font-black text-[10px] uppercase tracking-widest text-slate-500">
+                            UTR / Transaction Number <span class="text-error">*</span>
+                        </span>
+                    </label>
+                    <input type="text" name="utr_number" id="id_utr_number" 
+                           placeholder="Enter 12-digit UTR / Reference Number" 
+                           class="input input-bordered h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-primary text-sm font-bold" />
+                </div>
+            </div>
         </div>
+
+        <!-- Razorpay Specific Section -->
+        <div id="razorpay-fields" class="hidden space-y-6 py-10">
+            <div class="w-24 h-24 bg-primary/10 rounded-[2rem] flex items-center justify-center text-primary mx-auto">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-12 w-12" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 10h18M7 15h1m4 0h1m-7 4h12a3 3 0 003-3V8a3 3 0 00-3-3H6a3 3 0 00-3 3v8a3 3 0 003 3z" /></svg>
+            </div>
+            <h3 class="text-xl font-black uppercase tracking-tight">Razorpay Secure Online Payment</h3>
+            <p class="text-xs font-bold text-slate-500 uppercase tracking-widest leading-relaxed">Fast, secure, and supports Cards, Netbanking, UPI, and Wallets.</p>
+        </div>
+
+        <input type="hidden" name="payment_method" id="selected-payment-method" value="upi_qr" />
     </div>
 
     <!-- Navigation Buttons -->
@@ -250,8 +269,10 @@
                             <h3 class="font-black text-xs uppercase tracking-[0.2em] text-slate-400">Payment Info</h3>
                         </div>
                         <div class="bg-white p-6 rounded-3xl border border-slate-200 space-y-3 text-left">
-                            <p class="text-xs font-black uppercase tracking-widest text-slate-400">Method: <span class="text-slate-900">UPI QR</span></p>
+                        <p class="text-xs font-black uppercase tracking-widest text-slate-400">Method: <span id="review-payment_method_display" class="text-slate-900">UPI QR</span></p>
+                        <div id="review-utr-wrapper">
                             <p class="text-xs font-black uppercase tracking-widest text-slate-400">UTR / TXN ID: <span id="review-utr_number" class="text-primary italic"></span></p>
+                        </div>
                             <div class="flex items-center gap-2 pt-2 text-success">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
                                 <span class="text-[9px] font-black uppercase tracking-widest">Screenshot Uploaded</span>
@@ -384,89 +405,102 @@
                 display.textContent = input.value;
             }
         });
-    }
 
-    function generateUPIQR() {
-        const upiId = "{{ upi_id }}";
-        const payeeName = "{{ payee_name }}";
-        const amount = "{{ cart.get_total_price }}";
-        const currency = "INR";
+        const method = document.getElementById('selected-payment-method').value;
+        const methodDisplay = document.getElementById('review-payment_method_display');
+        const utrWrapper = document.getElementById('review-utr-wrapper');
         
-        // UPI URI Format: upi://pay?pa=VPA&pn=NAME&am=AMOUNT&cu=CURRENCY
-        const upiUri = `upi://pay?pa=${upiId}&pn=${encodeURIComponent(payeeName)}&am=${amount}&cu=${currency}`;
-        
-        const qrContainer = document.getElementById('qrcode');
-        qrContainer.innerHTML = ''; // Clear previous
-        
-        qrcode = new QRCode(qrContainer, {
-            text: upiUri,
-            width: 200,
-            height: 200,
-            colorDark : "#000000",
-            colorLight : "#ffffff",
-            correctLevel : QRCode.CorrectLevel.H
-        });
-    }
-
-    function previewScreenshot(event) {
-        const file = event.target.files[0];
-        const container = document.getElementById('screenshot-preview-container');
-        const preview = document.getElementById('screenshot-preview');
-        
-        if (file) {
-            preview.src = URL.createObjectURL(file);
-            container.classList.remove('hidden');
+        if (method === 'razorpay') {
+            methodDisplay.textContent = 'Razorpay (Online)';
+            utrWrapper.classList.add('hidden');
+        } else {
+            methodDisplay.textContent = 'UPI QR (Manual)';
+            utrWrapper.classList.remove('hidden');
         }
     }
 
-    function clearScreenshot() {
-        const input = document.getElementById('id_payment_screenshot');
-        const container = document.getElementById('screenshot-preview-container');
-        input.value = '';
-        container.classList.add('hidden');
-    }
-
-    function copyUPI() {
-        const upiText = document.getElementById('backend-upi-id').textContent;
-        navigator.clipboard.writeText(upiText).then(() => {
-            alert('UPI ID copied to clipboard!');
-        });
-    }
-
-    function showStep(n) {
-        steps.forEach(s => s.classList.add('hidden'));
-        document.getElementById(`step-${n}`).classList.remove('hidden');
-        updateProgressBar(n);
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-        currentStepIdx = n;
+    function setPaymentMethod(method) {
+        document.getElementById('selected-payment-method').value = method;
         
-        if (n === 2) generateUPIQR();
-        if (n === 3) populateReview();
-    }
-
-    function nextStep(n) {
-        const currentFields = document.getElementById(`step-${currentStepIdx}`).querySelectorAll('[required]');
-        let valid = true;
+        const upiFields = document.getElementById('upi-fields');
+        const razorpayFields = document.getElementById('razorpay-fields');
+        const upiBtn = document.getElementById('btn-upi_qr');
+        const razorBtn = document.getElementById('btn-razorpay');
         
-        currentFields.forEach(field => {
-            if (!field.checkValidity()) {
-                field.reportValidity();
-                valid = false;
-            }
-        });
+        const screenshotInput = document.getElementById('id_payment_screenshot');
+        const utrInput = document.getElementById('id_utr_number');
 
-        if (valid) showStep(n);
+        if (method === 'upi_qr') {
+            upiFields.classList.remove('hidden');
+            razorpayFields.classList.add('hidden');
+            upiBtn.classList.add('bg-white', 'shadow-lg', 'text-primary');
+            upiBtn.classList.remove('text-slate-400');
+            razorBtn.classList.remove('bg-white', 'shadow-lg', 'text-primary');
+            razorBtn.classList.add('text-slate-400');
+            
+            // Re-enable requirements
+            screenshotInput.required = true;
+            utrInput.required = true;
+            generateUPIQR();
+        } else {
+            upiFields.classList.add('hidden');
+            razorpayFields.classList.remove('hidden');
+            razorBtn.classList.add('bg-white', 'shadow-lg', 'text-primary');
+            razorBtn.classList.remove('text-slate-400');
+            upiBtn.classList.remove('bg-white', 'shadow-lg', 'text-primary');
+            upiBtn.classList.add('text-slate-400');
+            
+            // Disable requirements for Razorpay (will be handled by callback)
+            screenshotInput.required = false;
+            utrInput.required = false;
+        }
     }
 
-    function prevStep(n) {
-        showStep(n);
-    }
+    // Razorpay Auto-Trigger
+    {% if payment_trigger %}
+    window.addEventListener('load', function() {
+        var options = {
+            "key": "{{ razorpay_key_id }}",
+            "amount": "{{ razorpay_amount }}",
+            "currency": "INR",
+            "name": "GPZ Store",
+            "description": "Payment for Order #{{ order.id }}",
+            "order_id": "{{ razorpay_order_id }}",
+            "handler": function (response){
+                // Submit to callback
+                var form = document.createElement('form');
+                form.method = 'POST';
+                form.action = "{% url 'orders:razorpay_callback' %}";
+                
+                var fields = {
+                    'razorpay_payment_id': response.razorpay_payment_id,
+                    'razorpay_order_id': response.razorpay_order_id,
+                    'razorpay_signature': response.razorpay_signature,
+                    'csrfmiddlewaretoken': '{{ csrf_token }}'
+                };
 
-    // Final Button Logic
-    function validateFinal() {
-        submitBtn.disabled = !tosCheckbox.checked;
-    }
-    tosCheckbox.addEventListener('change', validateFinal);
+                for (var key in fields) {
+                    var input = document.createElement('input');
+                    input.type = 'hidden';
+                    input.name = key;
+                    input.value = fields[key];
+                    form.appendChild(input);
+                }
+
+                document.body.appendChild(form);
+                form.submit();
+            },
+            "prefill": {
+                "name": "{{ order.first_name }} {{ order.last_name }}",
+                "email": "{{ order.email }}",
+                "contact": "{{ order.phone }}"
+            },
+            "theme": { "color": "#7C3AED" }
+        };
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+    });
+    {% endif %}
 
     form.addEventListener('submit', function(e) {
         const loader = document.getElementById('btn-loader');

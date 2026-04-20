@@ -8,4 +8,5 @@ urlpatterns = [
     path("confirmation/<int:order_id>/", views.order_confirmation, name="order_confirmation"),
     path("list/", views.order_list, name="order_list"),
     path("order/<int:order_id>/", views.order_detail, name="order_detail"),
+    path("razorpay/callback/", views.razorpay_callback, name="razorpay_callback"),
 ]
