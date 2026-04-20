@@ -83,7 +83,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth" ,
                 "django.contrib.messages.context_processors.messages" ,
                 "cart.cart.cart_context" ,
-                "core.context_processors.contact_info" ,
+                "tes.context_processors.theme_colors" ,
             ] ,
         } ,
     } ,
@@ -254,10 +254,6 @@ JAZZMIN_UI_TWEAKS = {
     }
 }
 
-# Razorpay Configuration
-RAZORPAY_KEY_ID = os.environ.get("RAZORPAY_KEY_ID", "rzp_test_placeholder")
-RAZORPAY_KEY_SECRET = os.environ.get("RAZORPAY_KEY_SECRET", "placeholder_secret")
-
 # Email Configuration
 EMAIL_BACKEND = os.environ.get("EMAIL_BACKEND", "django.core.mail.backends.smtp.EmailBackend")
 EMAIL_HOST = os.environ.get("EMAIL_HOST", "smtp.gmail.com")
@@ -267,15 +263,3 @@ EMAIL_HOST_USER = os.environ.get("EMAIL_HOST_USER", "")
 EMAIL_HOST_PASSWORD = os.environ.get("EMAIL_HOST_PASSWORD", "")
 DEFAULT_FROM_EMAIL = os.environ.get("DEFAULT_FROM_EMAIL", EMAIL_HOST_USER)
 ADMIN_EMAIL = os.environ.get("ADMIN_EMAIL", EMAIL_HOST_USER)
-
-# Site Contact Information
-SITE_CONTACT = {
-    "phone": "+91 7358402926",
-    "email": "spport@gpzstore.com",
-    "whatsapp": "7358402926",
-    # "address": "Chennai, Tamil Nadu, India",
-    "whatsapp_url": "https://wa.me/7358402926",
-    "working_hours": "Mon-Fri: 9AM - 6PM",
-}
-
-

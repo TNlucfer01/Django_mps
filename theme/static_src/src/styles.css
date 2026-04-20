@@ -13,7 +13,7 @@
 @source "../../../**/*.{html,py,js}";
 
 @theme {
-  --color-primary-gradient: linear-gradient(90deg, #807E82 0%, #888889 50%, #959595 100%);
+  --color-primary-gradient: linear-gradient(135deg, #7C3AED 0%, #4F46E5 50%, #2563EB 100%);
   --color-secondary-bg: #F3F0F0;
   
   --glass-blur: 12px;

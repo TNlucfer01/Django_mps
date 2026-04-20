@@ -8,7 +8,7 @@
   <div class="container mx-auto px-6">
 
     <!-- Breadcrumb -->
-    <nav class="breadcrumbs text-xs font-bold opacity-40 uppercase tracking-wider mb-10">
+    <nav class="breadcrumbs text-xs font-bold opacity-40 uppercase tracking-wider mb-10 reveal reveal-up">
       <ul>
         <li><a href="{% url 'products:product_list' %}">Products</a></li>
         <li><a href="{{ product.category.get_absolute_url }}">{{ product.category.name }}</a></li>
@@ -20,7 +20,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16 items-start">
 
       <!-- Image Gallery -->
-      <div class="space-y-4">
+      <div class="space-y-4 reveal reveal-left">
         <div class="rounded-[3rem] overflow-hidden bg-base-200/50 aspect-square flex items-center justify-center border border-base-200">
           {% if product.image %}
           <img id="main-image" src="{{ product.image.url }}" alt="{{ product.name }}" class="w-full h-full object-cover"/>
@@ -46,7 +46,7 @@
       </div>
 
       <!-- Product Info -->
-      <div class="space-y-8">
+      <div class="space-y-8 reveal reveal-right">
         <!-- Badge Row -->
         <div class="flex flex-wrap items-center gap-3">
           {% if product.brand %}<span class="badge bg-primary-gradient border-none text-white rounded-xl font-black uppercase tracking-widest text-[10px] px-4 py-3">{{ product.brand }}</span>{% endif %}
@@ -116,7 +116,7 @@
 
     <!-- Specifications -->
     {% if spec_items %}
-    <section class="mt-24 space-y-8">
+    <section class="mt-24 space-y-8 reveal reveal-up">
       <div class="flex items-center gap-4">
         <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
         <h2 class="text-3xl font-black tracking-tight uppercase italic">Specifications</h2>
@@ -134,7 +134,7 @@
 
     <!-- Long Description -->
     {% if product.long_description %}
-    <section class="mt-24 space-y-8">
+    <section class="mt-24 space-y-8 reveal reveal-up">
       <div class="flex items-center gap-4">
         <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
         <h2 class="text-3xl font-black tracking-tight uppercase italic">About This Product</h2>
@@ -148,7 +148,7 @@
       <div class="flex items-center justify-between flex-wrap gap-4">
         <div class="flex items-center gap-4">
           <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
-          <h2 class="text-2xl md:text-3xl font-black tracking-tight uppercase italic">Reviews</h2>
+          <h2 class="text-2xl md:text-3xl font-black tracking-tight uppercase italic reveal reveal-up">Reviews</h2>
         </div>
         {% if user.is_authenticated and not user_review %}
         <a href="#write-review" class="btn btn-outline border-gray-400 text-gray-700 rounded-full font-bold uppercase text-[10px] tracking-widest">Write a Review</a>
@@ -157,7 +157,7 @@
 
       <!-- Star Breakdown -->
       {% if review_count > 0 %}
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-slate-950 rounded-[3rem] text-white">
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8 p-8 bg-slate-950 rounded-[3rem] text-white reveal reveal-up">
         <div class="text-center space-y-2 flex flex-col items-center justify-center">
           <p class="text-7xl font-black tracking-tighter">{{ product.average_rating }}</p>
           <div class="rating rating-md">
@@ -250,13 +250,13 @@
     <!-- Related Products -->
     {% if related_products %}
     <section class="mt-24 space-y-8">
-      <div class="flex items-center gap-4">
+      <div class="flex items-center gap-4 reveal reveal-up">
         <div class="w-1.5 h-10 bg-primary-gradient rounded-full"></div>
         <h2 class="text-2xl md:text-3xl font-black tracking-tight uppercase italic">You Might Also Like</h2>
       </div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-6">
         {% for p in related_products %}
-        <a href="{{ p.get_absolute_url }}" class="group bg-base-100 border border-base-200 rounded-[2rem] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all">
+        <a href="{{ p.get_absolute_url }}" class="group bg-base-100 border border-base-200 rounded-[2rem] overflow-hidden hover:shadow-xl hover:-translate-y-1 transition-all reveal reveal-up delay-{{ forloop.counter|add:1 }}00">
           {% if p.image %}
           <div class="bg-base-200/50 aspect-square overflow-hidden"><img src="{{ p.image.url }}" alt="{{ p.name }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform"/></div>
           {% endif %}

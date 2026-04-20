@@ -8,10 +8,49 @@
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body { font-family: 'Inter', sans-serif; }
+
+        /* Scroll Animation Styles */
+        .reveal {
+            opacity: 0;
+            transition: all 1.2s cubic-bezier(0.22, 1, 0.36, 1);
+            will-change: transform, opacity;
+        }
+        
+        .reveal.active {
+            opacity: 1 !important;
+            transform: translate(0, 0) scale(1) !important;
+        }
+
+        .reveal-left { transform: translateX(-100px); }
+        .reveal-right { transform: translateX(100px); }
+        .reveal-up { transform: translateY(100px); }
+        .reveal-down { transform: translateY(-100px); }
+        .reveal-zoom { transform: scale(0.9); }
+
+        /* Staggered delays */
+        .delay-100 { transition-delay: 200ms; }
+        .delay-200 { transition-delay: 300ms; }
+        .delay-300 { transition-delay: 400ms; }
+        .delay-400 { transition-delay: 500ms; }
+        .delay-500 { transition-delay: 600ms; }
     </style>
     {% tailwind_css %} 
+    <style>
+        {% if primary_color %}
+        :root {
+            --color-primary: {{ primary_color }} !important;
+            --color-primary-gradient: linear-gradient(135deg, {{ primary_color }} 0%, {{ primary_color }} 50%, {{ primary_color }} 100%) !important;
+            {% if secondary_color %}
+            --color-secondary-bg: {{ secondary_color }} !important;
+            {% endif %}
+        }
+        {% endif %}
+        body {
+            background-color: {{ background_color|default:'#F3F0F0' }} !important;
+        }
+    </style>
 </head>
-<body class="bg-[#F3F0F0] text-base-content antialiased">
+<body class="text-base-content antialiased">
     <div class="drawer">
         <input id="mobile-menu-drawer" type="checkbox" class="drawer-toggle" />
         <div class="drawer-content flex flex-col min-h-screen">
@@ -42,6 +81,7 @@
                 <li><a href="{% url 'products:product_list' %}" class="font-semibold {% if 'products' in request.resolver_match.namespace or 'product' in request.resolver_match.url_name %}text-primary bg-primary/10{% endif %}">Products</a></li>
                 <li><a href="{% url 'core:about' %}" class="font-semibold {% if request.resolver_match.url_name == 'about' %}text-primary bg-primary/10{% endif %}">About</a></li>
                 <li><a href="{% url 'core:contact' %}" class="font-semibold {% if request.resolver_match.url_name == 'contact' %}text-primary bg-primary/10{% endif %}">Contact</a></li>
+                <li><a href="{% url 'page_viewing' %}" class="font-semibold {% if request.resolver_match.url_name == 'page_viewing' %}text-primary bg-primary/10{% endif %}">Page Viewing</a></li>
             </ul>
         </div>
         
@@ -237,5 +277,37 @@
 </div> <!-- Close drawer -->
 
 {% block extra_scripts %}{% endblock %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const observerOptions = {
+            root: null,
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('active');
+                    // entry.target.style.transitionDelay = entry.target.dataset.delay || '0ms';
+                }
+            });
+        }, observerOptions);
+
+        const revealElements = document.querySelectorAll('.reveal');
+        revealElements.forEach(el => observer.observe(el));
+    });
+</script>
+    <!-- Service Worker Registration -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('{% static "js/sw.js" %}')
+                    .then(reg => console.log('SW Registered'))
+                    .catch(err => console.log('SW Error:', err));
+            });
+        }
+    </script>
 </body>
 </html>

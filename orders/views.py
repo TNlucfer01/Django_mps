@@ -8,8 +8,6 @@ import requests
 import threading
 from cart.cart import Cart
 from .models import Order, OrderItem
-import razorpay
-from django.views.decorators.csrf import csrf_exempt
 
 logger = logging.getLogger(__name__)
 
@@ -60,82 +58,20 @@ def checkout(request):
             "State": state,
             "Postal Code": postal_code,
             "Country": country,
+            "UTR Number": utr_number,
         }
-        
-        # Add payment specific requirements
-        if payment_method == "upi_qr":
-            required_fields["UTR Number"] = utr_number
         missing = [label for label, value in required_fields.items() if not value]
         if missing:
             messages.error(request, f"Missing required fields: {', '.join(missing)}")
             context = {"cart": cart, "upi_id": settings.UPI_ID, "payee_name": settings.PAYEE_NAME}
             return render(request, "orders/checkout.html", context)
 
-        # --- Razorpay Flow ---
-        if payment_method == "razorpay":
-            order = Order.objects.create(
-                user=request.user,
-                first_name=first_name,
-                last_name=last_name,
-                email=email,
-                phone=phone,
-                address=address,
-                city=city,
-                state=state,
-                postal_code=postal_code,
-                country=country,
-                total_amount=cart.get_total_price(),
-                payment_method=payment_method,
-                is_paid=False,
-            )
-
-            for item in cart:
-                OrderItem.objects.create(
-                    order=order,
-                    product=item["product"],
-                    price=item["price"],
-                    quantity=item["quantity"],
-                )
-
-            # Initialize Razorpay Client
-            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-            
-            # Amount in paise
-            razorpay_amount = int(order.total_amount * 100)
-            
-            razorpay_order_data = {
-                "amount": razorpay_amount,
-                "currency": "INR",
-                "receipt": f"order_{order.id}",
-                "payment_capture": 1
-            }
-
-            try:
-                razorpay_order = client.order.create(data=razorpay_order_data)
-                order.razorpay_order_id = razorpay_order["id"]
-                order.save()
-
-                context = {
-                    "cart": cart,
-                    "order": order,
-                    "razorpay_order_id": razorpay_order["id"],
-                    "razorpay_key_id": settings.RAZORPAY_KEY_ID,
-                    "razorpay_amount": razorpay_amount,
-                    "payment_trigger": True,
-                }
-                return render(request, "orders/checkout.html", context)
-            except Exception as e:
-                logger.error(f"Razorpay order creation failed: {e}")
-                order.delete()
-                messages.error(request, "Could not initiate Razorpay payment. Please try again.")
-                return redirect("orders:checkout")
-
-        # --- UPI QR Flow ---
         if not payment_screenshot:
-            messages.error(request, "Payment screenshot is required for UPI QR.")
+            messages.error(request, "Payment screenshot is required.")
             context = {"cart": cart, "upi_id": settings.UPI_ID, "payee_name": settings.PAYEE_NAME}
             return render(request, "orders/checkout.html", context)
 
+        # --- BUG-01: is_paid=True since screenshot + UTR are provided ---
         order = Order.objects.create(
             user=request.user,
             first_name=first_name,
@@ -220,76 +156,6 @@ def checkout(request):
         "payee_name": settings.PAYEE_NAME,
     }
     return render(request, "orders/checkout.html", context)
-
-
-@login_required
-@csrf_exempt
-def razorpay_callback(request):
-    if request.method == "POST":
-        try:
-            # Razorpay sends payment details as POST data
-            payment_id = request.POST.get("razorpay_payment_id", "")
-            order_id = request.POST.get("razorpay_order_id", "")
-            signature = request.POST.get("razorpay_signature", "")
-
-            # Initialize Razorpay Client
-            client = razorpay.Client(auth=(settings.RAZORPAY_KEY_ID, settings.RAZORPAY_KEY_SECRET))
-
-            # Verify signature
-            params_dict = {
-                "razorpay_order_id": order_id,
-                "razorpay_payment_id": payment_id,
-                "razorpay_signature": signature,
-            }
-
-            client.utility.verify_payment_signature(params_dict)
-
-            # If verification success, update our order
-            order = get_object_or_404(Order, razorpay_order_id=order_id)
-            order.is_paid = True
-            order.razorpay_payment_id = payment_id
-            order.razorpay_signature = signature
-            order.status = "confirmed"
-            order.save()
-
-            # Clear cart
-            cart = Cart(request)
-            cart.clear()
-
-            # Sync to Sheets
-            products_list = []
-            for item in order.items.all():
-                p = item.product
-                products_list.append(f"{p.name} - Qty: {item.quantity}")
-            products_str = " | ".join(products_list)
-
-            payload = {
-                "order_id":       order.id,
-                "username":       order.user.username,
-                "name":           f"{order.first_name} {order.last_name}",
-                "email":          order.email,
-                "phone":          order.phone,
-                "address":        order.address,
-                "city":           order.city,
-                "state":          order.state,
-                "postal_code":    order.postal_code,
-                "country":        order.country,
-                "total_amount":   str(order.total_amount),
-                "products":       products_str,
-                "is_paid":        True,
-                "created_at":     order.created_at.strftime("%Y-%m-%d %H:%M:%S"),
-            }
-            threading.Thread(target=_push_to_sheets, args=(payload,), daemon=True).start()
-
-            messages.success(request, "Payment successful! Your order has been placed.")
-            return redirect("orders:order_confirmation", order_id=order.id)
-
-        except Exception as e:
-            logger.error(f"Razorpay callback verification failed: {e}")
-            messages.error(request, "Payment verification failed. Please contact support.")
-            return redirect("cart:cart_detail")
-
-    return redirect("cart:cart_detail")
 
 
 @login_required

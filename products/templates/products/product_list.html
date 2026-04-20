@@ -10,46 +10,43 @@
         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
-    <div class="container mx-auto px-6 relative z-10 text-center">
+    <div class="container mx-auto px-6 relative z-10 text-center reveal reveal-up pb-8">
         <h1 class="text-4xl lg:text-5xl font-black mb-4 tracking-tight uppercase italic">
             {% if current_category %}{{ current_category.name }}{% else %}All Products{% endif %}
         </h1>
-        <p class="text-white/70 font-medium tracking-widest uppercase text-[10px]">
+        <p class="text-white/70 font-medium tracking-widest uppercase text-[10px] mb-8">
             {{ page_obj.paginator.count }} product{{ page_obj.paginator.count|pluralize }} found
         </p>
+
+        <div class="max-w-2xl mx-auto flex gap-4">
+            <form method="get" class="flex-grow">
+                <div class="form-control relative">
+                    <input type="text" name="q" value="{{ search_query }}" placeholder="Search products..." 
+                           class="input input-lg rounded-[1.5rem] bg-white/10 hover:bg-white/20 border-white/20 focus:border-white/40 text-white placeholder:text-white/50 font-bold w-full pr-16 transition-all" />
+                    <button class="btn bg-white text-primary absolute right-2 top-2 rounded-[1rem] btn-sm h-12 px-4 hover:scale-105 transition-transform">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.65 16.65A7 7 0 1116.65 2.35a7 7 0 010 14.3z"/></svg>
+                    </button>
+                </div>
+            </form>
+            
+            <label for="filter-drawer" class="btn btn-lg btn-square rounded-[1.5rem] bg-white/10 text-white border-white/20 hover:bg-white hover:text-primary hover:scale-105 transition-all flex-none">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                </svg>
+            </label>
+        </div>
     </div>
 </section>
 
 <section class="py-16 bg-base-100">
-    <div class="container mx-auto px-6 mb-12">
-            <div class="max-w-2xl mx-auto flex gap-4">
-                        <!-- Search -->
 
-                <form method="get" class="flex-grow">
-                    <div class="form-control relative">
-                        <input type="text" name="q" value="{{ search_query }}" placeholder="Search products..." 
-                               class="input input-lg rounded-[1.5rem] bg-base-200 border-none font-bold w-full pr-16 focus:ring-2 focus:ring-gray-300/20 transition-all" />
-                        <button class="btn bg-primary-gradient border-none text-white absolute right-2 top-2 rounded-[1rem] btn-sm h-12 px-4">
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-4.35-4.35M16.65 16.65A7 7 0 1116.65 2.35a7 7 0 010 14.3z"/></svg>
-                        </button>
-                    </div>
-                </form>
-                
-                <label for="filter-drawer" class="btn btn-lg btn-square rounded-[1.5rem] bg-base-200 border-none hover:bg-primary-gradient hover:text-white transition-all flex-none">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
-                    </svg>
-                </label>
-            </div>
-        </div>
-    </div>
 
     <div class="container mx-auto px-6">
         <div class="grid grid-cols-1 gap-12">
             <!-- Products Grid Section -->
             <main class="space-y-10">
                 <!-- Sort Bar -->
-                <div class="flex items-center justify-between gap-4 flex-wrap">
+                <div class="flex items-center justify-between gap-4 flex-wrap reveal reveal-up">
                     <p class="text-sm font-bold opacity-40 uppercase tracking-widest">
                         Showing {{ page_obj.start_index }}–{{ page_obj.end_index }} of {{ page_obj.paginator.count }}
                     </p>
@@ -66,7 +63,7 @@
                 {% if products %}
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
                     {% for product in products %}
-                    <article class="bg-base-100 border border-base-200 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-6xl hover:shadow-base-200/60 hover:-translate-y-3 transition-all duration-300 group flex flex-col">
+                    <article class="bg-base-100 border border-base-200 rounded-[2.5rem] overflow-hidden shadow-sm hover:shadow-6xl hover:shadow-base-200/60 hover:-translate-y-3 transition-all duration-300 group flex flex-col reveal reveal-up delay-{{ forloop.counter|add:1 }}00">
                         <!-- Image -->
                         <a href="{{ product.get_absolute_url }}" class="block relative overflow-hidden aspect-square bg-base-200/50">
                             {% if product.image %}
