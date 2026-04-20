@@ -83,7 +83,6 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth" ,
                 "django.contrib.messages.context_processors.messages" ,
                 "cart.cart.cart_context" ,
-                "tes.context_processors.theme_colors" ,
             ] ,
         } ,
     } ,
@@ -173,16 +172,12 @@ STORAGES = {
     },
     "staticfiles": {
         "BACKEND": (
-            "whitenoise.storage.CompressedManifestStaticFilesStorage"
+            "whitenoise.storage.CompressedStaticFilesStorage"
             if not DEBUG
             else "django.contrib.staticfiles.storage.StaticFilesStorage"
         ),
     },
 }
-
-# Disable strict manifest checking to prevent MissingFileError for missing source maps (.js.map)
-WHITENOISE_MANIFEST_STRICT = False
-
 
 # UPI Payment Configuration
 UPI_ID = os.environ.get("UPI_ID", "gpzstore@oksbi")
