@@ -22,7 +22,7 @@
 <section class="py-24 ">
     <div class="container mx-auto px-6">
         <div class="max-w-4xl mx-auto">
-            <div class="glass-morphism rounded-[3rem] p-8 lg:p-16 border border-base-200 shadow-2xl relative overflow-hidden">
+            <div class="glass-morphism rounded-[3rem] p-6 lg:p-16 border border-base-200 shadow-2xl relative overflow-hidden">
                 <div class="absolute top-0 right-0 w-64 h-64 bg-primary/5 rounded-full blur-[100px]"></div>
                 
                 <h2 class="text-3xl font-black mb-10 tracking-tight uppercase reveal reveal-up text-center">Select Theme Colors</h2>
@@ -62,27 +62,25 @@
                         </label>
                         {% endfor %}
                     </div>
-
                     <input type="hidden" name="primary" id="primary_input" value="{{ current_primary }}">
                     <input type="hidden" name="secondary" id="secondary_input" value="{{ current_secondary }}">
                     <input type="hidden" name="background" id="background_input" value="{{ current_background }}">
-
                     <!-- Live Preview -->
                     <div class="bg-base-200/50 rounded-[2.5rem] p-8 space-y-6 reveal reveal-up">
                         <h3 class="text-sm font-black uppercase opacity-40 tracking-[0.2em] text-center">Live Preview</h3>
-                        <div class="flex flex-col sm:flex-row gap-6 justify-center items-center">
+                        <div class="flex flex-col sm:flex-row gap-4 justify-center items-center">
                             <div id="preview-background" class="rounded-3xl p-4 flex gap-4 items-center border border-base-200" style="background-color: {{ current_background }}">
-                                <div id="preview-button" class="btn btn-lg px-8 rounded-2xl border-none text-white font-black uppercase tracking-tight shadow-xl" 
+                                <div id="preview-button" class="btn btn-md sm:btn-lg px-6 sm:px-8 rounded-2xl border-none text-white font-black uppercase tracking-tight shadow-xl" 
                                      style="background-color: {{ current_primary }}">
                                     Primary
                                 </div>
-                                <div id="preview-box" class="w-16 h-16 rounded-2xl" style="background-color: {{ current_secondary }}"></div>
+                                <div id="preview-box" class="w-12 h-12 sm:w-16 sm:h-16 rounded-2xl" style="background-color: {{ current_secondary }}"></div>
                             </div>
                         </div>
                     </div>
 
-                    <div class="flex justify-center pt-8 reveal reveal-up">
-                        <button type="submit" class="btn bg-primary-gradient border-none text-white btn-xl rounded-full px-16 shadow-2xl shadow-primary/30 font-black tracking-tight uppercase hover:scale-105 transition-all">
+                    <div class="flex justify-center pt-8">
+                        <button type="submit" class="btn bg-primary-gradient border-none text-white btn-lg rounded-full px-8 sm:px-16 shadow-2xl shadow-primary/30 font-black tracking-tight uppercase hover:scale-105 transition-all w-full sm:w-auto">
                             Save Theme Settings
                         </button>
                     </div>

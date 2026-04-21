@@ -81,7 +81,7 @@
                 <li><a href="{% url 'products:product_list' %}" class="font-semibold {% if 'products' in request.resolver_match.namespace or 'product' in request.resolver_match.url_name %}text-primary bg-primary/10{% endif %}">Products</a></li>
                 <li><a href="{% url 'core:about' %}" class="font-semibold {% if request.resolver_match.url_name == 'about' %}text-primary bg-primary/10{% endif %}">About</a></li>
                 <li><a href="{% url 'core:contact' %}" class="font-semibold {% if request.resolver_match.url_name == 'contact' %}text-primary bg-primary/10{% endif %}">Contact</a></li>
-                /* <li><a href="{% url 'page_viewing' %}" class="font-semibold {% if request.resolver_match.url_name == 'page_viewing' %}text-primary bg-primary/10{% endif %}">Page Viewing</a></li> */
+                 <!-- <li><a href="{% url 'page_viewing' %}" class="font-semibold {% if request.resolver_match.url_name == 'page_viewing' %}text-primary bg-primary/10{% endif %}">Page Viewing</a></li> --> 
             </ul>
         </div>
         
