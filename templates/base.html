@@ -110,30 +110,7 @@
                 </div>
             </div>
 
-            <div class="hidden md:flex gap-2 border-l border-base-200 pl-4">
-                {% if user.is_authenticated %}
-                <div class="dropdown dropdown-end">
-                    <div tabindex="0" role="button" class="btn btn-ghost btn-md gap-2 rounded-full border border-base-300">
-                        <div class="avatar placeholder">
-                            <div class="bg-primary text-primary-content rounded-full w-8">
-                                <span>{{ user.username|first|upper }}</span>
-                            </div>
-                        </div>
-                        <span class="font-semibold text-sm">{{ user.username }}</span>
-                    </div>
-                    <ul tabindex="0" class="dropdown-content menu  rounded-box z-[1] w-52 p-2 shadow-xl border border-base-200 mt-2">
-                        <li><a href="{% url 'orders:order_list' %}">My Orders</a></li>
-                        <li><a href="{% url 'accounts:profile' %}">Profile</a></li>
-                        <li><div class="divider my-0"></div></li>
-                        <li><a href="{% url 'accounts:logout' %}" class="text-error">Logout</a></li>
-                    </ul>
-                </div>
-                {% else %}
-                <!-- <a href="{% url 'accounts:login' %}" class="btn btn-ghost btn-sm font-bold uppercase tracking-tight">Login</a> 
-                    <a href="{% url 'accounts:register' %}" class="btn btn-primary btn-sm rounded-full px-6 font-bold uppercase tracking-tight">Register</a> -->
-                -->               
-                {% endif %}
-            </div>
+            
         </div>
     </div>
 
@@ -255,27 +232,7 @@
                 <li><a href="{% url 'core:contact' %}" class="rounded-2xl {% if request.resolver_match.url_name == 'contact' %}bg-primary-gradient text-white{% endif %}">Contact</a></li>
             </ul>
 
-            <div class="mt-10 pt-10 border-t border-white/10 space-y-4">
-                {% if user.is_authenticated %}
-                <div class="flex items-center gap-4 px-4 py-3 bg-white/5 rounded-2xl">
-                    <div class="avatar placeholder">
-                        <div class="bg-primary-gradient text-white rounded-full w-10">
-                            <span>{{ user.username|first|upper }}</span>
-                        </div>
-                    </div>
-                    <div>
-                        <p class="font-bold">{{ user.username }}</p>
-                        <p class="text-xs opacity-50">{{ user.email }}</p>
-                    </div>
-                </div>
-                <a href="{% url 'orders:order_list' %}" class="btn btn-ghost justify-start w-full rounded-2xl">My Orders</a>
-                <a href="{% url 'accounts:profile' %}" class="btn btn-ghost justify-start w-full rounded-2xl">Profile</a>
-                <a href="{% url 'accounts:logout' %}" class="btn btn-error btn-outline w-full rounded-2xl mt-4">Logout</a>
-                {% else %}
-                <!-- <a href="{% url 'accounts:login' %}" class="btn btn-ghost w-full rounded-2xl">Login</a>
-                <a href="{% url 'accounts:register' %}" class="btn bg-primary-gradient border-none text-white w-full rounded-2xl">Register</a> -->
-                {% endif %}
-            </div>
+                <!-- Removed user/login links as user authentication is disabled -->
         </div>
     </div>
 </div> <!-- Close drawer -->

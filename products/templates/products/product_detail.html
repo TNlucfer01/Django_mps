@@ -185,8 +185,7 @@
             {% endfor %}
             {% endwith %}
           </div>
-          <p class="text-[10px] font-black opacity-40 uppercase tracking-widest">{{ review_count }} Review{{
-            review_count|pluralize }}</p>
+          <p class="text-[10px] font-black opacity-40 uppercase tracking-widest">{{ review_count }} Review{{review_count|pluralize }}</p>
         </div>
         <div class="col-span-2 space-y-2 justify-center flex flex-col">
           {% for star, data in star_breakdown.items %}
@@ -230,8 +229,7 @@
                 {% endfor %}
               </div>
             </div>
-            <p class="text-[10px] font-black opacity-30 uppercase tracking-widest shrink-0">{{ review.created_at|date:"M
-              d, Y" }}</p>
+            <p class="text-[10px] font-black opacity-30 uppercase tracking-widest shrink-0">{{ review.created_at|date:"M  , Y" }}</p>
           </div>
           {% if review.title %}<p class="font-extrabold text-lg tracking-tight">{{ review.title }}</p>{% endif %}
           <p class="opacity-60 leading-relaxed text-sm">{{ review.comment }}</p>
@@ -277,44 +275,7 @@
       {% endif %}
 
       <!-- Write Review Form -->
-      {% if user.is_authenticated and not user_review %}
-      <div id="write-review" class="p-10 rounded-[3rem] border border-base-200 space-y-8">
-        <h3 class="text-2xl font-black uppercase italic">Share Your Experience</h3>
-        <form method="post" action="{% url 'reviews:add_review' product.slug %}" class="space-y-6">
-          {% csrf_token %}
-          <div class="form-control">
-            <label class="label"><span
-                class="label-text font-black uppercase tracking-widest text-[10px]">Rating</span></label>
-            <div class="rating rating-lg gap-1">
-              {% for i in "54321" %}
-              <input type="radio" name="rating" value="{{ i }}" class="mask mask-star-2 bg-amber-400" />
-              {% endfor %}
-            </div>
-          </div>
-          <div class="form-control">
-            <label class="label"><span
-                class="label-text font-black uppercase tracking-widest text-[10px]">Title</span></label>
-            <input type="text" name="title" maxlength="200" placeholder="Summarize your experience..."
-              class="input input-lg rounded-2xl bg-base-200/50 border-base-300 font-bold focus:border-primary" />
-          </div>
-          <div class="form-control">
-            <label class="label"><span
-                class="label-text font-black uppercase tracking-widest text-[10px]">Review</span></label>
-            <textarea name="comment" rows="5" placeholder="Describe your experience in detail..."
-              class="textarea textarea-lg rounded-2xl bg-base-200/50 border-base-300 font-bold focus:border-primary"
-              required></textarea>
-          </div>
-          <button type="submit"
-            class="btn bg-primary-gradient border-none text-white btn-lg rounded-2xl font-black uppercase shadow-2xl shadow-primary/20">Submit Review</button>
-        </form>
-      </div>
-      {% elif not user.is_authenticated %}
-      <div class="text-center p-10 rounded-[2.5rem] bg-base-200/50 border border-base-200 space-y-4">
-        <p class="font-bold opacity-50 uppercase tracking-widest text-sm">Login to write a review</p>
-        <a href="{% url 'accounts:login' %}"
-          class="btn bg-primary-gradient border-none text-white rounded-full px-12 font-bold uppercase shadow-xl shadow-primary/20">Login</a>
-      </div>
-      {% endif %}
+      <!-- Write Review Form (Removed as user login is disabled) -->
     </section>
 
     <!-- Related Products -->
