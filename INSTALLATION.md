@@ -73,6 +73,8 @@ python manage.py runserver
 In a separate terminal (with the virtual environment activated), start the Tailwind watcher or build the styles:
 
 ```bash
+
+
 # To watch for changes
 python manage.py tailwind start
 
