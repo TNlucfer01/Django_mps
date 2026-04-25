@@ -14,54 +14,58 @@
         <div class="absolute top-0 right-0 w-64 h-64 bg-white rounded-full blur-3xl"></div>
         <div class="absolute bottom-0 left-0 w-96 h-96 bg-white rounded-full blur-3xl"></div>
     </div>
-    <div class="container mx-auto px-6 relative z-10 text-center">
-        <h1 class="text-4xl lg:text-6xl font-black mb-4 tracking-tighter uppercase">Checkout</h1>
-        <p class="text-[10px] font-black tracking-[0.4em] uppercase opacity-70 mb-16">Secure your order in four simple steps</p>
+    <div class="container mx-auto px-4 md:px-6 relative z-10 text-center">
+        <h1 class="text-3xl md:text-4xl lg:text-6xl font-black mb-2 md:mb-4 tracking-tighter uppercase">Checkout</h1>
+        <p class="text-[8px] md:text-[10px] font-black tracking-widest md:tracking-[0.4em] uppercase opacity-70 mb-10 md:mb-16">Secure your order in four simple steps</p>
 
         <!-- Progress Stepper (4 Steps) -->
         <div class="max-w-5xl mx-auto">
-            <div class="flex items-center justify-between relative px-4 text-[9px] font-black uppercase tracking-widest text-white/30">
-                <div class="absolute top-6 left-0 w-full h-1 bg-white/10 -translate-y-1/2 rounded-full"></div>
-                <div id="progress-bar" class="absolute top-6 left-0 h-1 bg-white -translate-y-1/2 rounded-full transition-all duration-700" style="width: 0%;"></div>
+            <div class="flex items-center justify-between relative px-2 md:px-4 text-[8px] md:text-[9px] font-black uppercase tracking-widest text-white/30">
+                <div class="absolute top-4 md:top-6 left-0 w-full h-1 bg-white/10 -translate-y-1/2 rounded-full"></div>
+                <div id="progress-bar" class="absolute top-4 md:top-6 left-0 h-1 bg-white -translate-y-1/2 rounded-full transition-all duration-700" style="width: 0%;"></div>
                 
                 <!-- Step 1 -->
-                <div class="step-item relative z-10 flex flex-col items-center gap-4 active-step" data-step="1">
-                    <div class="w-12 h-12 rounded-full bg-white text-primary flex items-center justify-center font-black shadow-2xl transition-all duration-300">1</div>
-                    <span>Shipping</span>
+                <div class="step-item relative z-10 flex flex-col items-center gap-2 md:gap-4 active-step" data-step="1">
+                    <div class="w-8 h-8 md:w-12 md:h-12 text-xs md:text-base rounded-full bg-white text-primary flex items-center justify-center font-black shadow-2xl transition-all duration-300">1</div>
+                    <span class="hidden sm:block">Shipping</span>
+                    <span class="block sm:hidden">Ship</span>
                 </div>
                 <!-- Step 2 -->
-                <div class="step-item relative z-10 flex flex-col items-center gap-4" data-step="2">
-                    <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center font-black transition-all duration-300">2</div>
-                    <span>Payment</span>
+                <div class="step-item relative z-10 flex flex-col items-center gap-2 md:gap-4" data-step="2">
+                    <div class="w-8 h-8 md:w-12 md:h-12 text-xs md:text-base rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center font-black transition-all duration-300">2</div>
+                    <span class="hidden sm:block">Payment</span>
+                    <span class="block sm:hidden">Pay</span>
                 </div>
                 <!-- Step 3 -->
-                <div class="step-item relative z-10 flex flex-col items-center gap-4" data-step="3">
-                    <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center font-black transition-all duration-300">3</div>
-                    <span>Review</span>
+                <div class="step-item relative z-10 flex flex-col items-center gap-2 md:gap-4" data-step="3">
+                    <div class="w-8 h-8 md:w-12 md:h-12 text-xs md:text-base rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center font-black transition-all duration-300">3</div>
+                    <span class="hidden sm:block">Review</span>
+                    <span class="block sm:hidden">Review</span>
                 </div>
                 <!-- Step 4 -->
-                <div class="step-item relative z-10 flex flex-col items-center gap-4" data-step="4">
-                    <div class="w-12 h-12 rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center font-black transition-all duration-300">4</div>
-                    <span>Confirm</span>
+                <div class="step-item relative z-10 flex flex-col items-center gap-2 md:gap-4" data-step="4">
+                    <div class="w-8 h-8 md:w-12 md:h-12 text-xs md:text-base rounded-full bg-white/10 backdrop-blur-md border border-white/20 text-white flex items-center justify-center font-black transition-all duration-300">4</div>
+                    <span class="hidden sm:block">Confirm</span>
+                    <span class="block sm:hidden">Done</span>
                 </div>
             </div>
         </div>
     </div>
 </section>
 
-<div class="min-h-screen py-16">
-    <div class="container mx-auto px-6 max-w-4xl">
+<div class="min-h-screen py-8 md:py-16">
+    <div class="container mx-auto px-4 md:px-6 max-w-4xl">
         <form id="checkout-form" method="post" action="{% url 'orders:checkout' %}" enctype="multipart/form-data">
             {% csrf_token %}
 
             <!-- Step 1: User Personal / Shipping Details -->
-            <section id="step-1" class="wizard-step bg-base-100 p-8 md:p-14 rounded-[3.5rem] border border-base-200 shadow-2xl space-y-10">
-                <div class="flex items-center gap-4">
-                    <div class="w-1.5 h-8 bg-primary rounded-full"></div>
-                    <h2 class="text-2xl font-black tracking-tight uppercase">Shipping Details</h2>
+            <section id="step-1" class="wizard-step bg-base-100 p-6 md:p-14 rounded-[2rem] md:rounded-[3.5rem] border border-base-200 shadow-xl md:shadow-2xl space-y-8 md:space-y-10">
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div class="w-1.5 h-6 md:h-8 bg-primary rounded-full"></div>
+                    <h2 class="text-xl md:text-2xl font-black tracking-tight uppercase">Shipping Details</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-8">
                     <div class="form-control">
                         <label class="label"><span class="label-text font-black text-[10px] uppercase tracking-widest text-base-content/60">First Name <span class="text-error">*</span></span></label>
                         <input type="text" name="first_name" id="id_first_name" placeholder="e.g. John" class="input input-bordered h-14 rounded-2xl bg-slate-50 border-slate-200 focus:border-primary text-sm font-bold" required />
@@ -104,25 +108,25 @@
                     </div>
                 </div>
 
-                <div class="pt-10 flex justify-end">
-                    <button type="button" onclick="nextStep(2)" class="btn btn-primary btn-lg rounded-2xl px-12 h-16 font-black uppercase tracking-tight shadow-xl shadow-primary/20 group">
+                <div class="pt-6 md:pt-10 flex justify-end">
+                    <button type="button" onclick="nextStep(2)" class="btn btn-primary btn-lg rounded-2xl w-full md:w-auto px-12 h-14 md:h-16 font-black uppercase tracking-tight shadow-xl shadow-primary/20 group">
                         Next: Payment
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </button>
                 </div>
             </section>
 <!-- Step 2: Payment Details (Dynamic QR & Upload) -->
-<section id="step-2" class="wizard-step hidden bg-base-100 p-8 md:p-14 rounded-[3.5rem] border border-base-200 shadow-2xl text-center space-y-10">
+<section id="step-2" class="wizard-step hidden bg-base-100 p-6 md:p-14 rounded-[2rem] md:rounded-[3.5rem] border border-base-200 shadow-xl md:shadow-2xl text-center space-y-6 md:space-y-10">
     
-    <div class="flex items-center gap-4 text-left">
-        <div class="w-1.5 h-8 bg-primary rounded-full"></div>
-        <h2 class="text-2xl font-black tracking-tight uppercase">Scan & Pay via UPI</h2>
+    <div class="flex items-center gap-3 md:gap-4 text-left">
+        <div class="w-1.5 h-6 md:h-8 bg-primary rounded-full"></div>
+        <h2 class="text-xl md:text-2xl font-black tracking-tight uppercase">Scan & Pay via UPI</h2>
     </div>
 
-    <div class="max-w-md mx-auto space-y-10">
+    <div class="max-w-md mx-auto space-y-8 md:space-y-10">
         
         <!-- UPI Payee Display -->
-        <div class="bg-base-200/50 p-8 rounded-[2.5rem] border border-base-200 space-y-4 text-left relative overflow-hidden">
+        <div class="bg-base-200/50 p-6 md:p-8 rounded-[2rem] md:rounded-[2.5rem] border border-base-200 space-y-4 text-left relative overflow-hidden">
             <div class="absolute top-0 right-0 p-4 opacity-10">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" /></svg>
             </div>
@@ -202,15 +206,15 @@
     </div>
 
     <!-- Navigation Buttons -->
-    <div class="pt-10 flex justify-between items-center">
+    <div class="pt-6 md:pt-10 flex flex-row justify-between items-center w-full">
         <button type="button" onclick="prevStep(1)" 
-                class="btn btn-ghost btn-lg rounded-2xl px-8 h-16 font-black uppercase tracking-tight opacity-40 hover:opacity-100">
+                class="btn btn-ghost rounded-xl px-4 md:px-8 h-12 md:h-16 font-black uppercase tracking-tight opacity-40 hover:opacity-100">
             Back
         </button>
         <button type="button" onclick="nextStep(3)" 
-                class="btn btn-primary btn-lg rounded-2xl px-12 h-16 font-black uppercase tracking-tight shadow-xl shadow-primary/20 group">
+                class="btn btn-primary rounded-xl px-5 md:px-12 h-12 md:h-16 font-black uppercase tracking-tight shadow-xl shadow-primary/20 group">
             Next: Review
-            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" />
             </svg>
         </button>
@@ -218,13 +222,13 @@
 </section>
 
             <!-- Step 3: Order Overview / Review Data -->
-            <section id="step-3" class="wizard-step hidden bg-base-100 p-8 md:p-14 rounded-[4rem] border border-base-200 shadow-2xl space-y-10">
-                <div class="flex items-center gap-4">
-                    <div class="w-1.5 h-8 bg-primary rounded-full"></div>
-                    <h2 class="text-2xl font-black tracking-tight uppercase">Review Your Data</h2>
+            <section id="step-3" class="wizard-step hidden bg-base-100 p-6 md:p-14 rounded-[2rem] md:rounded-[4rem] border border-base-200 shadow-xl md:shadow-2xl space-y-6 md:space-y-10">
+                <div class="flex items-center gap-3 md:gap-4">
+                    <div class="w-1.5 h-6 md:h-8 bg-primary rounded-full"></div>
+                    <h2 class="text-xl md:text-2xl font-black tracking-tight uppercase">Review Your Data</h2>
                 </div>
 
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-12">
                     <!-- Shipping Review -->
                     <div class="space-y-6">
                         <div class="flex items-center gap-3 text-left">
@@ -251,7 +255,7 @@
                         </div>
                         <div class="bg-base-100 p-6 rounded-3xl border border-base-200 space-y-3 text-left">
                             <p class="text-xs font-black uppercase tracking-widest text-base-content/40">Method: <span class="text-base-content">UPI QR</span></p>
-                            <p class="text-xs font-black uppercase tracking-widest text-base-content/40">UTR / TXN ID: <span id="review-utr_number" class="text-primary italic"></span></p>
+                            <p class="text-xs font-black uppercase tracking-widest text-base-content/40 break-all">UTR / TXN ID: <span id="review-utr_number" class="text-primary italic"></span></p>
                             <div class="flex items-center gap-2 pt-2 text-success">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7" /></svg>
                                 <span class="text-[9px] font-black uppercase tracking-widest">Screenshot Uploaded</span>
@@ -267,7 +271,7 @@
                             </div>
                             <h3 class="font-black text-xs uppercase tracking-[0.2em] text-base-content/40">Order Items</h3>
                         </div>
-                        <div class="bg-white p-8 rounded-3xl border border-slate-200 divide-y divide-slate-100 text-left">
+                        <div class="bg-white p-6 md:p-8 rounded-[2rem] border border-slate-200 divide-y divide-slate-100 text-left">
                             {% for item in cart %}
                             <div class="flex justify-between items-center py-4 first:pt-0 last:pb-0">
                                 <div>
@@ -280,51 +284,53 @@
                             <div class="pt-6 flex justify-between items-end">
                                 <div>
                                     <p class="text-[9px] font-black text-base-content/40 uppercase tracking-widest">Shipping: <span class="text-success">FREE</span></p>
-                                    <p class="text-xl font-black uppercase tracking-tighter mt-1">Total Payable</p>
+                                    <p class="text-lg md:text-xl font-black uppercase tracking-tighter mt-1">Total Payable</p>
                                 </div>
-                                <p class="text-4xl font-black tracking-tighter italic text-primary leading-none">₹{{ cart.get_total_price }}</p>
+                                <p class="text-3xl md:text-4xl font-black tracking-tighter italic text-primary leading-none">₹{{ cart.get_total_price }}</p>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="pt-10 flex justify-between items-center border-t border-base-200">
-                    <button type="button" onclick="prevStep(2)" class="btn btn-ghost btn-lg rounded-2xl px-8 h-16 font-black uppercase tracking-tight opacity-40 hover:opacity-100">Back</button>
-                    <button type="button" onclick="nextStep(4)" class="btn btn-primary btn-lg rounded-2xl px-12 h-16 font-black uppercase tracking-tight shadow-xl shadow-primary/20 group">
+                <div class="pt-6 md:pt-10 flex flex-row justify-between items-center w-full border-t border-base-200">
+                    <button type="button" onclick="prevStep(2)" class="btn btn-ghost rounded-xl px-4 md:px-8 h-12 md:h-16 font-black uppercase tracking-tight opacity-40 hover:opacity-100">Back</button>
+                    <button type="button" onclick="nextStep(4)" class="btn btn-primary rounded-xl px-5 md:px-12 h-12 md:h-16 font-black uppercase tracking-tight shadow-xl shadow-primary/20 group">
                         Next: Confirm
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
                     </button>
                 </div>
             </section>
 
             <!-- Step 4: Confirmation / Final Review & Submit -->
-            <section id="step-4" class="wizard-step hidden bg-base-100 p-8 md:p-14 rounded-[3.5rem] border border-primary/20 shadow-2xl shadow-primary/10 text-center space-y-10">
-                <div class="w-20 h-20 bg-primary/10 rounded-3xl flex items-center justify-center text-primary mx-auto mb-6">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-10 w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
+            <section id="step-4" class="wizard-step hidden bg-base-100 p-6 md:p-14 rounded-[2rem] md:rounded-[3.5rem] border border-primary/20 shadow-xl md:shadow-2xl shadow-primary/10 text-center space-y-6 md:space-y-10">
+                <div class="w-16 h-16 md:w-20 md:h-20 bg-primary/10 rounded-2xl md:rounded-3xl flex items-center justify-center text-primary mx-auto mb-4 md:mb-6">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 md:h-10 md:w-10" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" /></svg>
                 </div>
                 
-                <h2 class="text-3xl font-black tracking-tight uppercase px-12 leading-tight">One last check to ensure everything is perfect!</h2>
-                <p class="text-sm font-bold text-base-content/50 uppercase tracking-widest">By confirming, you finalize your order and agree to our terms.</p>
+                <h2 class="text-2xl md:text-3xl font-black tracking-tight uppercase px-2 md:px-12 leading-tight">One last check to ensure everything is perfect!</h2>
+                <p class="text-xs md:text-sm font-bold text-base-content/50 uppercase tracking-widest px-2">By confirming, you finalize your order and agree to our terms.</p>
 
-                <div class="max-w-md mx-auto space-y-8 pt-6">
+                <div class="max-w-md mx-auto space-y-6 md:space-y-8 pt-4 md:pt-6">
                     <div class="form-control items-center">
-                        <label class="label cursor-pointer gap-4 group">
-                            <input type="checkbox" id="tos-checkbox" class="checkbox checkbox-primary w-6 h-6 rounded-lg" required />
-                            <span class="text-xs font-bold uppercase tracking-tight text-base-content/60 group-hover:text-primary transition-colors text-center leading-relaxed">I have reviewed all the data and it is correct. I agree to the Terms of Service.</span>
+                        <label class="label cursor-pointer gap-3 md:gap-4 group">
+                            <input type="checkbox" id="tos-checkbox" class="checkbox checkbox-primary w-5 h-5 md:w-6 md:h-6 rounded-lg" required />
+                            <span class="text-[10px] md:text-xs font-bold uppercase tracking-tight text-base-content/60 group-hover:text-primary transition-colors text-left sm:text-center leading-relaxed">I have reviewed all the data and it is correct. I agree to the <br class="hidden sm:block"> Terms of Service.</span>
                         </label>
                     </div>
 
-                    <button type="submit" id="submit-btn" class="btn btn-primary btn-lg w-full h-20 rounded-[2rem] shadow-2xl shadow-primary/30 font-black tracking-tighter uppercase text-2xl group relative overflow-hidden disabled:opacity-30">
-                        <span class="relative z-10 flex items-center justify-center gap-3">
-                            Confirm Order
-                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 group-hover:translate-x-2 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                        </span>
-                        <div id="btn-loader" class="absolute inset-0 bg-primary flex items-center justify-center translate-y-full transition-transform duration-300">
-                            <span class="loading loading-spinner loading-md"></span>
-                        </div>
-                    </button>
-                    
-                    <button type="button" onclick="prevStep(3)" class="btn btn-ghost btn-sm font-black uppercase tracking-widest opacity-40 hover:opacity-100">Review Data Again</button>
+                    <div class="flex flex-row justify-between items-center w-full pt-4 md:pt-6">
+                        <button type="button" onclick="prevStep(3)" class="btn btn-ghost rounded-xl px-3 md:px-8 h-12 md:h-16 font-black uppercase tracking-tight opacity-40 hover:opacity-100 text-[10px] md:text-sm">Back</button>
+                        
+                        <button type="submit" id="submit-btn" class="btn btn-primary rounded-xl px-4 md:px-12 h-12 md:h-16 shadow-2xl shadow-primary/30 font-black tracking-tighter uppercase text-sm md:text-xl group relative overflow-hidden disabled:opacity-30">
+                            <span class="relative z-10 flex items-center justify-center gap-2 md:gap-3">
+                                Confirm Order
+                                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 md:h-5 md:w-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
+                            </span>
+                            <div id="btn-loader" class="absolute inset-0 bg-primary flex items-center justify-center translate-y-full transition-transform duration-300">
+                                <span class="loading loading-spinner loading-md"></span>
+                            </div>
+                        </button>
+                    </div>
                 </div>
             </section>
         </form>
@@ -448,12 +454,14 @@
         const currentFields = document.getElementById(`step-${currentStepIdx}`).querySelectorAll('[required]');
         let valid = true;
         
-        currentFields.forEach(field => {
+        for (let i = 0; i < currentFields.length; i++) {
+            const field = currentFields[i];
             if (!field.checkValidity()) {
                 field.reportValidity();
                 valid = false;
+                break;
             }
-        });
+        }
 
         if (valid) showStep(n);
     }
