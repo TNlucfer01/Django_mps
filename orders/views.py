@@ -97,31 +97,22 @@ def checkout(request):
                 quantity=item["quantity"],
             )
 
-        if order.items.count() == 0:
-            order.delete()
-            messages.error(request, "Your cart appears to be empty or contains unavailable products.")
-            return redirect("cart:cart_detail")
+        # Build Google Sheets payload string from cart BEFORE clearing it
+        products_list = []
+        for item in cart:
+            p = item["product"]
+            sku_str = p.sku or "N/A"
+            brand_str = p.brand or "N/A"
+            products_list.append(f"{p.name} (SKU: {sku_str}, Brand: {brand_str}) - Qty: {item['quantity']}")
+        products_str = " | ".join(products_list)
 
-        # Build Google Sheets payload
+        # Build other payload data
         screenshot_url = ""
         if order.payment_screenshot:
             try:
                 screenshot_url = order.payment_screenshot.url
             except Exception:
                 screenshot_url = ""
-
-        products_str = ""
-        try:
-            items = list(order.items.all())
-            products_list = []
-            for item in items:
-                p = item.product
-                sku_str = p.sku or "N/A"
-                brand_str = p.brand or "N/A"
-                products_list.append(f"{p.name} (SKU: {sku_str}, Brand: {brand_str}) - Qty: {item.quantity}")
-            products_str = " | ".join(products_list)
-        except Exception as e:
-            logger.warning(f"Could not build products string for order {order.id}: {e}")
 
         username = order.user.username if order.user else "Guest"
         payload = {
@@ -149,7 +140,7 @@ def checkout(request):
         # Store order id in session so guest can view confirmation
         request.session['last_order_id'] = order.id
 
-        messages.success(request, f"Order #{order.id} placed successfully!")
+        messages.success(request, f"Order placed successfully!")
         return redirect("orders:order_confirmation", order_id=order.id)
 
     context = {

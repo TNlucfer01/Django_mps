@@ -101,7 +101,7 @@
                 <div tabindex="0" class="card card-compact dropdown-content z-[1] mt-3 w-52 shadow-xl bg-base-100 border border-base-300">
                     <div class="card-body">
                         <span class="text-lg font-bold">{{ cart|length }} Items</span>
-                        <span class="text-info">Subtotal: ${{ cart.get_total_price }}</span>
+                        <span class="text-primary font-bold">Subtotal: ${{ cart.get_total_price }}</span>
                         <div class="card-actions">
                             <a href="{% url 'cart:cart_detail' %}" class="btn bg-primary-gradient border-none text-white btn-block">View cart</a>
                         </div>
