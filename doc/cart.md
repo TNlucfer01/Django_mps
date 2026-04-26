@@ -236,19 +236,28 @@ Also ensure `django.contrib.sessions` is in `INSTALLED_APPS` and the session mid
 ## How to Reuse This App in a New Project
 
 1. **Copy the `cart/` folder** into your project.
-2. Add `"cart"` to `INSTALLED_APPS`.
+2. Add `"cart"` to `INSTALLED_APPS` in `settings.py`.
 3. Add `CART_SESSION_ID = "cart"` to your `settings.py`.
 4. Register the context processor in `settings.py`:
    ```python
-   "cart.cart.cart_context",
+   TEMPLATES = [{
+       'OPTIONS': {
+           'context_processors': [
+               ...
+               "cart.cart.cart_context",
+           ],
+       },
+   }]
    ```
-5. Include the URLs:
+5. Include the URLs in your root `urls.py`:
    ```python
    path("cart/", include("cart.urls")),
    ```
-6. Ensure `django.contrib.sessions` is enabled and migrated.
-7. **Adapt the import**: The `Cart` class imports `from products.models import Product`. Change this to match your product model location.
-8. Create the `cart/templates/cart/cart_detail.html` template.
+6. **Ensure `django.contrib.sessions` is enabled** in `INSTALLED_APPS` and `MIDDLEWARE`, then run migrations.
+7. **Adapt the Product import**: The `Cart` class (in `cart/cart.py`) and views (in `cart/views.py`) import `from products.models import Product`.
+   - Update these imports to point to your project's product model.
+   - Your product model should have `price`, `name`, and `id` fields (or update the `Cart` logic accordingly).
+8. **Create the template**: A basic template is provided at `cart/templates/cart/cart_detail.html`. Customize it to match your site's design (it uses Tailwind CSS by default).
 
 ---
 

@@ -24,13 +24,3 @@ class Review(models.Model):
 
     def __str__(self):
         return f"{self.user.username} — {self.product.name} ({self.rating}★)"
-
-    def save(self, *args, **kwargs):
-        super().save(*args, **kwargs)
-        # Recalculate product aggregate rating on every save
-        self.product.update_rating()
-
-    def delete(self, *args, **kwargs):
-        product = self.product
-        super().delete(*args, **kwargs)
-        product.update_rating()

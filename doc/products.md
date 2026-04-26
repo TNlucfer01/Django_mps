@@ -2,7 +2,7 @@
 
 ## Overview
 
-The `products` app is the **central catalogue** of the e-commerce project. It defines three models — `Category`, `Tag`, and `Product` — and provides class-based views for browsing products with filtering, sorting, and searching. It also hosts review-aggregate fields (`average_rating`, `review_count`) that are updated by the `reviews` app whenever a review is saved or deleted.
+The `products` app is the **central catalogue** of the e-commerce project. It defines three models — `Category`, `Tag`, and `Product` — and provides class-based views for browsing products with filtering, sorting, and searching. It also hosts review-aggregate fields (`average_rating`, `review_count`) that are updated by the `reviews` app (via Django signals) whenever a review is saved or deleted.
 
 **App namespace**: `products`  
 **URL prefix** (as registered in `tes/urls.py`): `/products/`
@@ -186,10 +186,13 @@ def save(self, *args, **kwargs):
 **`update_rating()` — lazy import pattern:**
 ```python
 def update_rating(self):
-    from reviews.models import Review   # ← lazy import avoids circular dependency
+    from reviews.models import Review   # ← lazy import avoids circular dependency at load time
     approved = Review.objects.filter(product=self, is_approved=True)
     ...
 ```
+
+> [!NOTE]
+> This method is decoupled from the `reviews` app. While `Product` provides the method, it is typically called via **signals** defined in the `reviews` app, ensuring that `products` can function even if `reviews` is disabled (though ratings will not update automatically).
 
 ---
 
@@ -332,9 +335,10 @@ urlpatterns = [
    python manage.py makemigrations products
    python manage.py migrate
    ```
-5. The `update_rating()` method imports from `reviews.models`. If you don't use the `reviews` app, remove that method and the `average_rating`/`review_count` fields.
-6. The `specifications` JSONField requires a database that supports JSON (PostgreSQL) or SQLite 3.9+.
-7. `image_gallery` is a JSONField storing a list of URL strings. If you need file uploads instead, replace it with a separate `ProductImage` model.
+5. The `update_rating()` method imports from `reviews.models`. If you don't use the `reviews` app, you can keep the method (it will do nothing) or remove it along with the `average_rating`/`review_count` fields.
+6. **Decoupled Architecture**: Rating updates are triggered by signals in the `reviews` app. This means you can drop in a different review system as long as it calls `product.update_rating()`.
+7. The `specifications` JSONField requires a database that supports JSON (PostgreSQL) or SQLite 3.9+.
+8. `image_gallery` is a JSONField storing a list of URL strings. If you need file uploads instead, replace it with a separate `ProductImage` model.
 
 ---
 
