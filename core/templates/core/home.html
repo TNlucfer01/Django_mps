@@ -24,12 +24,13 @@
                 </h1>
 
                 <p class="text-base md:text-lg lg:text-xl text-white/80 max-w-lg leading-relaxed font-medium">
-                    Tamil Nadu's trusted destination for Heavy Boss quality audio — trolley woofers, tower speakers, home theaters, plus essential utility gadgets like rechargeable fans and emergency LED lights.
+                    Tamil Nadu's trusted destination for Heavy Boss quality audio — trolley woofers, tower speakers,
+                    home theaters, plus essential utility gadgets like rechargeable fans and emergency LED lights.
                 </p>
 
                 <div class="flex flex-wrap gap-4 pt-4">
                     <a href="{% url 'products:product_list' %}"
-                       class="btn btn-lg bg-white text-primary border-none hover:bg-white/90 group rounded-full px-8 shadow-xl shadow-black/20 transition-all duration-300">
+                        class="btn btn-lg bg-white text-primary border-none hover:bg-white/90 group rounded-full px-8 shadow-xl shadow-black/20 transition-all duration-300">
                         Shop Now
                         <svg xmlns="http://www.w3.org/2000/svg"
                             class="h-5 w-5 group-hover:translate-x-1 transition-transform" fill="none"
@@ -68,7 +69,7 @@
 <section class="py-32 ">
     <div class="container mx-auto px-6">
         <div class="grid grid-cols-1 md:grid-cols-2 gap-16 max-w-5xl mx-auto text-center">
-            <!-- Item 1 --> 
+            <!-- Item 1 -->
             <div class="space-y-6 group reveal reveal-left">
                 <div
                     class="w-20 h-20 mx-auto glass-morphism rounded-3xl flex items-center justify-center text-gray-700 group-hover:bg-primary-gradient group-hover:text-white transition-all duration-300 shadow-sm group-hover:shadow-xl group-hover:shadow-gray-400/20">
@@ -85,7 +86,7 @@
                     </p>
                 </div>
             </div>
-        
+
             <!-- Item 2 -->
             <div class="space-y-6 group reveal reveal-right">
                 <div
@@ -110,10 +111,10 @@
 
 
 <!-- CTA Section -->
-<section class="py-32">
+<section class="py-12 md:py-32">
     <div class="container mx-auto px-6 transition-all duration-700">
         <div
-            class="relative rounded-[4rem] overflow-hidden bg-primary-gradient p-16 lg:p-32 text-center text-white shadow-2xl">
+            class="relative rounded-[4rem] overflow-hidden bg-primary-gradient p-8 md:p-16 lg:p-32 text-center text-white shadow-2xl">
             <!-- Background mesh -->
             <div class="absolute inset-0 opacity-20 pointer-events-none">
                 <div class="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-white rounded-full blur-[100px]"></div>
@@ -124,12 +125,13 @@
             <div class="relative z-10 space-y-10 reveal reveal-zoom">
                 <p
                     class="text-xl lg:text-3xl text-white/90 font-bold tracking-tight px-4 max-w-4xl mx-auto leading-relaxed">
-                    Experience Heavy Boss quality audio and reliable utility electronics — serving Tamil Nadu with the best in sound and gadgets
+                    Experience Heavy Boss quality audio and reliable utility electronics — serving Tamil Nadu with the
+                    best in sound and gadgets
                 </p>
-                
+
                 <div class="pt-4">
                     <a href="{% url 'products:product_list' %}"
-                        class="btn btn-lg h-20 bg-white text-primary border-none hover:bg-white/90 rounded-full px-16 shadow-2xl font-black text-xl tracking-tighter uppercase hover:scale-105 transition-all duration-300">
+                        class="btn btn-lg h-20 bg-white text-primary border-none hover:bg-white/90 rounded-full px-7 md:px-16 shadow-2xl font-black text-xl tracking-tighter uppercase hover:scale-105 transition-all duration-300">
                         View All Products
                     </a>
                 </div>
@@ -137,4 +139,8 @@
         </div>
     </div>
 </section>
+{% endblock %}
+
+{% block footer %}
+{% include 'partials/footer.html' %}
 {% endblock %}

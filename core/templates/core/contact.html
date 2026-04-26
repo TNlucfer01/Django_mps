@@ -21,10 +21,10 @@
 
 <!-- Trust Stats Section -->
 <section class="py-12 bg-base-200/50 border-b border-base-200">
-    <div class="container mx-auto px-6 reveal reveal-up">
-        <div class="grid grid-cols-2 gap-4 sm:gap-6 md:flex md:flex-wrap md:justify-center md:gap-12 lg:gap-24">
+    <div class="container mx-auto scroll-px-10 reveal reveal-up">
+        <div class="grid px-2 grid-cols-2 gap-4 sm:gap-6 md:flex md:flex-wrap md:justify-center md:gap-12 lg:gap-24">
             <!-- Card 1: Community -->
-            <div class="bg-base-100 p-4 sm:p-6 rounded-[2rem] shadow-sm border border-base-200 flex items-center gap-3 group reveal reveal-up delay-100 hover:shadow-md transition-shadow">
+            <div class="bg-base-100 p-4 sm:p-2 rounded-[2rem] shadow-sm border border-base-200 flex items-center gap-3 group reveal reveal-up delay-100 hover:shadow-md transition-shadow">
                 <div class="w-12 h-12 rounded-2xl bg-base-200/50 flex items-center justify-center text-base-content/60 group-hover:scale-110 transition-transform shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path>
@@ -40,7 +40,7 @@
             </div>
 
             <!-- Card 2: Avg Response -->
-            <div class="bg-base-100 p-4 sm:p-6 rounded-[2rem] shadow-sm border border-base-200 flex items-center gap-3 group reveal reveal-up delay-200 hover:shadow-md transition-shadow">
+            <div class="bg-base-100 p-4 sm:p-2 rounded-[2rem] shadow-sm border border-base-200 flex items-center gap-3 group reveal reveal-up delay-200 hover:shadow-md transition-shadow">
                 <div class="w-12 h-12 rounded-2xl glass-morphism flex items-center justify-center text-gray-600 group-hover:scale-110 transition-transform shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="12" cy="12" r="10"></circle>
@@ -54,7 +54,7 @@
             </div>
 
             <!-- Card 3: Reliability — centered below the two on mobile -->
-            <div class="col-span-2 md:col-span-1 mx-auto w-[calc(50%-8px)] md:w-auto bg-base-100 p-4 sm:p-6 rounded-[2rem] shadow-sm border border-base-200 flex items-center gap-3 group reveal reveal-up delay-300 hover:shadow-md transition-shadow">
+            <div class="col-span-2 md:col-span-1 mx-auto w-[calc(50%-8px)] md:w-auto bg-base-100 p-4 sm:p-2 rounded-[2rem] shadow-sm border border-base-200 flex items-center gap-3 group reveal reveal-up delay-300 hover:shadow-md transition-shadow">
                 <div class="w-12 h-12 rounded-2xl bg-base-200/50 flex items-center justify-center text-base-content/60 group-hover:scale-110 transition-transform shrink-0">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
@@ -291,4 +291,8 @@
         }
     });
 </script>
+{% endblock %}
+
+{% block footer %}
+{% include 'partials/footer.html' %}
 {% endblock %}
