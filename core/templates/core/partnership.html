@@ -1,7 +1,7 @@
 {% extends 'base.html' %}
 {% load static %}
 
-{% block title %}Partnership Program - SS Electronics{% endblock %}
+{% block title %}DealerShipgram - SS Electronics{% endblock %}
 
 {% block content %}
 <!-- Page Header -->
@@ -16,7 +16,7 @@
             <span class="text-[10px] md:text-xs font-black tracking-[0.2em] uppercase text-white/90">Growth Opportunity</span>
         </div>
         <h1 class="text-5xl lg:text-7xl font-black mb-6 tracking-tight uppercase italic leading-none">
-            <span class="text-white">Bussines</span> <span class="text-white italic">Partnership</span>
+            <span class="text-white italic">Dealership</span>
         </h1>
         <p class="text-lg md:text-xl text-white/70 max-w-2xl mx-auto font-medium leading-relaxed">
             Join South India's fastest-growing business network. Scale your venture with premium inventory and priority support.
@@ -30,7 +30,7 @@
         <div class="grid grid-cols-2 lg:grid-cols-4 gap-8 reveal reveal-up">
             <div class="text-center space-y-2 reveal reveal-up delay-100">
                 <p class="text-4xl font-black text-primary tracking-tighter">500+</p>
-                <p class="text-xs font-bold uppercase opacity-40">Active Partners</p>
+                <p class="text-xs font-bold uppercase opacity-40">Active Dealers</p>
             </div>
             <div class="text-center space-y-2 reveal reveal-up delay-200">
                 <p class="text-4xl font-black text-primary tracking-tighter">24h</p>
@@ -92,10 +92,8 @@
                         <select name="business_type" class="select select-bordered rounded-2xl bg-base-200/50 border-none h-16 px-6 font-bold focus:ring-4 focus:ring-primary/10 transition-all">
                             <option disabled selected>Select Category</option>
                             <option>Retail Electronics</option>
-                            <option>Physical Retail Store</option>
                             <option>Online Marketplace</option>
                             <option>Wholesale / Distributor</option>
-                            <option>Corporate Gifting</option>
                         </select>
                     </div>
 
@@ -120,10 +118,9 @@
             <!-- Content Column -->
             <div class="lg:col-span-5 space-y-12 lg:sticky lg:top-32 reveal reveal-right">
                 <div class="space-y-6">
-                    <h3 class="text-3xl font-black tracking-tight tracking-tighter uppercase italic">Why partner with      SS Electronics?</h3>
+                    <h3 class="text-3xl font-black tracking-tight tracking-tighter uppercase italic">Why DealerShip with      SS Electronics?</h3>
                     <p class="text-lg text-base-content/60 font-medium leading-relaxed">We don't just supply products; we power business ecosystems across Tamil Nadu.</p>
                 </div>
-
                 <div class="space-y-10">
                     <div class="flex gap-6 reveal reveal-up delay-100">
                         <div class="w-12 h-12 rounded-2xl bg-primary/10 flex items-center justify-center text-primary shrink-0">
@@ -159,7 +156,7 @@
                 <div class="bg-base-200/50 p-8 rounded-[3rem] border border-base-300">
                     <p class="text-sm font-bold opacity-40 uppercase tracking-widest mb-4">Direct Support</p>
                     <p class="text-lg font-black tracking-tight mb-2 italic">{{ contact.email }}</p>
-                    <p class="text-sm font-medium text-base-content/60">{{ contact.phone }} (Partnership Desk)</p>
+                    <p class="text-sm font-medium text-base-content/60">{{ contact.phone }} </p>
                 </div>
             </div>
         </div>
