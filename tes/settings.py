@@ -183,7 +183,7 @@ STORAGES = {
 
 # UPI Payment Configuration
 UPI_ID = os.environ.get("UPI_ID", "gpzstore@oksbi")
-PAYEE_NAME = os.environ.get("PAYEE_NAME", "GPZ Store")
+PAYEE_NAME = os.environ.get("PAYEE_NAME", " SS Electronincs")
 
 # Google Sheets Sync — Apps Script Web App URL
 GOOGLE_SCRIPT_URL = os.environ.get("GOOGLE_SCRIPT_URL", "")
