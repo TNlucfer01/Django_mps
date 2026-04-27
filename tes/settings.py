@@ -212,11 +212,11 @@ INTERNAL_IPS = [
 ]
 
 JAZZMIN_SETTINGS = {
-    "site_title": "tes Admin",
-    "site_header": "tes",
-    "site_brand": "tes",
-    "welcome_sign": "Welcome to tes Management",
-    "copyright": "tes Ltd",
+    "site_title": "SS Eletronics Admin",
+    "site_header": "SS Eletronics",
+    "site_brand": "SS Eletronics",
+    "welcome_sign": "Welcome to SS Eletronics Management",
+    "copyright": "SS Eletronics Ltd",
     "search_model": ["auth.User", "products.Product"],
     "show_sidebar": True,
     "navigation_expanded": True,
