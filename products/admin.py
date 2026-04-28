@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Product, Category, Tag
+from .models import Product, ProductImage, Category, Tag
 
 
 @admin.register(Category)
@@ -20,8 +20,24 @@ class TagAdmin(admin.ModelAdmin):
     list_filter = ["is_active"]
 
 
+class ProductImageInline(admin.TabularInline):
+    """Inline image uploader — add/remove/reorder gallery images directly on the Product page."""
+    model = ProductImage
+    extra = 3                          # Show 3 blank upload slots by default
+    fields = ["image", "order"]
+    ordering = ["order"]
+    show_change_link = False
+
+    def get_extra(self, request, obj=None, **kwargs):
+        # Don't show blank rows when editing an existing product with many images
+        if obj and obj.gallery_images.count() >= 10:
+            return 0
+        return self.extra
+
+
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    inlines = [ProductImageInline]
     list_display = [
         "name", "brand", "sku", "category",
         "price", "original_price", "stock_quantity",
@@ -50,7 +66,8 @@ class ProductAdmin(admin.ModelAdmin):
             "fields": ("stock_quantity", "availability_status", "is_active")
         }),
         ("Media", {
-            "fields": ("image", "image_gallery", "video_url")
+            "description": "Upload the main product image below. Use the 'Product Images' section further down to upload gallery images from your device.",
+            "fields": ("image", "video_url")
         }),
         ("Specifications", {
             "fields": ("specifications",)

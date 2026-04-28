@@ -84,17 +84,9 @@ class Command(BaseCommand):
                         'category': product_category,
                         'video_url': item.get('video_url', ''),
                         'specifications': item.get('specifications', {}),
-                        'image_gallery': item.get('image_gallery', []),
                         'is_active': item.get('is_active', True),
                     }
                 )
-
-                # 3. Handle Main Image if not set
-                if not product.image and item.get('image_gallery'):
-                    first_img = item.get('image_gallery')[0]
-                    # Assuming the image is in media/products/
-                    product.image = f'products/{first_img}'
-                    product.save()
 
                 # 4. Handle Tags
                 tags_list = item.get('tags', [])

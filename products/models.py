@@ -4,6 +4,24 @@ from django.utils.text import slugify
 import uuid
 
 
+class ProductImage(models.Model):
+    """An uploaded gallery image attached to a product."""
+
+    product = models.ForeignKey(
+        "Product",
+        on_delete=models.CASCADE,
+        related_name="gallery_images",
+    )
+    image = models.ImageField(upload_to="products/gallery/")
+    order = models.PositiveIntegerField(default=0, help_text="Lower number = shown first")
+
+    class Meta:
+        ordering = ["order", "id"]
+
+    def __str__(self):
+        return f"Image #{self.pk} for {self.product.name}"
+
+
 class Category(models.Model):
     """Hierarchical product category (e.g. Electronics > Mobiles)."""
     name = models.CharField(max_length=100, unique=True)
@@ -102,13 +120,9 @@ class Product(models.Model):
     tags = models.ManyToManyField(Tag, blank=True, related_name="products")
 
     # Media
-    image = models.ImageField(upload_to="products/", blank=True)   # Legacy single image
-    image_gallery = models.JSONField(
-        default=list,
-        blank=True,
-        help_text="List of image URLs for the product gallery.",
-    )
+    image = models.ImageField(upload_to="products/", blank=True, help_text="Main display image")
     video_url = models.URLField(max_length=500, blank=True)
+    # Gallery images are managed via the ProductImage related model (gallery_images)
 
     # Specifications (flexible JSON for electronics)
     specifications = models.JSONField(
