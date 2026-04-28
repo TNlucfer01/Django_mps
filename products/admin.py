@@ -1,5 +1,19 @@
+from django import forms
 from django.contrib import admin
 from .models import Product, ProductImage, Category, Tag
+from .widgets import KeyValueWidget
+
+
+class ProductAdminForm(forms.ModelForm):
+    """Custom admin form that replaces the raw JSON textarea for
+    specifications with a user-friendly key-value table widget."""
+
+    class Meta:
+        model = Product
+        fields = "__all__"
+        widgets = {
+            "specifications": KeyValueWidget(),
+        }
 
 
 @admin.register(Category)
@@ -37,6 +51,7 @@ class ProductImageInline(admin.TabularInline):
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
+    form = ProductAdminForm
     inlines = [ProductImageInline]
     list_display = [
         "name", "brand", "sku", "category",
