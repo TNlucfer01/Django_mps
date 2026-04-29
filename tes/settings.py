@@ -74,9 +74,9 @@ ROOT_URLCONF = "tes.urls"
 # this does the following that  is this tells the django where to find the templates 
 TEMPLATES = [
     {
-        "BACKEND": "django.template.backends.django.DjangoTemplates" ,
-        "DIRS": [BASE_DIR / "templates"] ,# tell to look inside the templates ininside each of the folder
-        "APP_DIRS": True , # tell to look inside the templates ininside each of the folder
+        "BACKEND": "django.template.backends.django.DjangoTemplates" , # this is a template engine right  we can use 
+        "DIRS": [BASE_DIR / "templates"] ,# tell to look inside the templates (in that folder  )inside the each app folder
+        "APP_DIRS": True , # tell to look inside the templates in inside each of the folder
         "OPTIONS": { # what dara are injectted to each of the temolated by default 
             "context_processors": [
                 "django.template.context_processors.request" ,
@@ -105,14 +105,14 @@ DATABASE_URL = os.environ.get("DATABASE_URL")
 if DATABASE_URL:
     DATABASES = {
         "default": dj_database_url.config(
-            default=DATABASE_URL,
-            conn_max_age=600,
-            conn_health_checks=True,
+            default=DATABASE_URL, 
+            conn_max_age=600, # whar does param means 
+            conn_health_checks=True, # what does this param means 
         )
     }
 
 else:
-    # Fallback to SQLite for local development
+    # Fallback to SQLite for local development and is it for each of the application or just e root folder 
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
@@ -120,6 +120,7 @@ else:
         }
     }
 # session engine + other things 
+# why doe we need a session engine and what is a session engine 
 SESSION_ENGINE = "django.contrib.sessions.backends.signed_cookies"
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = not DEBUG
@@ -144,7 +145,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
-# Internationalization
+# Internationalization what does this even meand and why does this be usefull for us 
 # https://docs.djangoproject.com/en/6.0/topics/i18n/
 
 LANGUAGE_CODE = "en-us"
@@ -158,7 +159,7 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
-
+# can i ave the stauc in my desired files 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
 STATICFILES_DIRS = [BASE_DIR / "static"]
@@ -166,7 +167,7 @@ STATICFILES_DIRS = [BASE_DIR / "static"]
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
 
-# Django 6.0-compatible storage configuration
+# Django 6.0-compatible storage configuration what is the differnce btw the storage and the database ?
 # Cloudinary handles media (uploaded files), WhiteNoise handles static files
 STORAGES = {
     "default": {
@@ -177,11 +178,11 @@ STORAGES = {
             "whitenoise.storage.CompressedStaticFilesStorage"
             if not DEBUG
             else "django.contrib.staticfiles.storage.StaticFilesStorage"
-        ),
+        ), # why is this written in this format?  and what is whitenoise? 
     },
 }
 
-# UPI Payment Configuration
+# UPI Payment Configuration okay im giving the data  here from the env but how does these data are given tot he application 
 UPI_ID = os.environ.get("UPI_ID", "gpzstore@oksbi")
 PAYEE_NAME = os.environ.get("PAYEE_NAME", " SS Electronincs")
 
@@ -191,7 +192,7 @@ GOOGLE_SCRIPT_URL = os.environ.get("GOOGLE_SCRIPT_URL", "")
 # Cloudinary — Cloud Storage for uploaded files (fixes Vercel read-only filesystem)
 # django-cloudinary-storage reads CLOUDINARY_URL from the environment automatically
 
-CART_SESSION_ID = "cart"
+CART_SESSION_ID = "cart" # why do we need one 
 
 # ─── Site Contact Information ───────────────────────────────────────────────
 # Single source of truth for contact details used in the footer and contact page.
@@ -210,6 +211,7 @@ TAILWIND_APP_NAME = 'theme'
 INTERNAL_IPS = [
     "127.0.0.1",
 ]
+# can i do the same for all the application in this setting or just for this one only 
 
 JAZZMIN_SETTINGS = {
     "site_title": "SS Eletronics Admin",

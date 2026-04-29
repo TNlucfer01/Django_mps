@@ -60,3 +60,6 @@ saved_model/
 tmp/
 temp/
 *.tmp
+
+test_project_reuse/
+

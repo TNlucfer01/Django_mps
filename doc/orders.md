@@ -289,8 +289,25 @@ urlpatterns = [
 
 ## Known Limitations & Future Improvements
 
-- **No inventory decrement**: `stock_quantity` on `Product` is not reduced when an order is placed.
 - **`is_paid=True` is optimistic**: A user could upload a fake screenshot. Admin review is required.
 - **No order cancellation view** for users (only admins can cancel via admin actions).
 - **No webhook / payment gateway**: Relies entirely on manual UPI + screenshot verification.
 - Google Sheets sync uses a daemon thread — if the process crashes immediately after `cart.clear()`, the sync may be lost.
+
+---
+
+## Recent Changes
+
+### Stock Pre-Check at Checkout (April 2026)
+
+The `checkout` view now performs a two-stage stock guard:
+
+1. **Cart page** — `cart_detail` view computes `over_limit` and `available_stock` for every item and passes them in the `cart_items` list. If any item is over stock, the Checkout button is replaced with a disabled greyed-out button and an error banner.
+
+2. **Checkout view** — Before creating `OrderItem` records, every item's live `stock_quantity` is re-fetched. If any product has insufficient stock, the Order header is deleted and the user is redirected to the cart with a clear error.
+
+3. **After a successful order** — `stock_quantity` is atomically decremented using `F("stock_quantity") - qty`, then re-fetched and clamped to 0 before `availability_status` is synced.
+
+### Guest Checkout (April 2026)
+
+`order_confirmation` now supports both authenticated users and guests. Guests are identified by a session key (`last_order_id`) set at checkout. The `order_list` and `order_detail` views still require login.

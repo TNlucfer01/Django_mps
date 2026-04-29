@@ -174,13 +174,36 @@ Looks up the product by slug, removes it from the cart by its numeric ID.
 | Auth | Not required |
 | Template | `cart/cart_detail.html` |
 
-Renders the cart page. The `cart` object is already in context via the context processor, but is also passed explicitly for clarity.
+Builds an annotated item list from the cart, checking each item's quantity against live DB stock.
 
 **Context variables:**
 
 | Variable | Type | Description |
 |----------|------|-------------|
-| `cart` | `Cart` | The current cart |
+| `cart` | `Cart` | The current cart (for totals/length) |
+| `cart_items` | `list` | Cart items enriched with stock fields — use this in the for loop |
+| `has_stock_issues` | `bool` | True if any item exceeds available stock |
+
+Each dict in `cart_items` contains:
+
+| Key | Description |
+|-----|-------------|
+| `product` | Product instance |
+| `quantity` | Requested quantity |
+| `price` | Unit price |
+| `total_price` | `price × quantity` |
+| `available_stock` | Live stock from DB |
+| `over_limit` | `True` if `quantity > available_stock` |
+
+> **Use `cart_items` in the template loop, not `cart`:**
+> ```html
+> {% for item in cart_items %}
+>   {{ item.product.name }} — {{ item.quantity }}
+>   {% if item.over_limit %}
+>     <span class="text-error">Only {{ item.available_stock }} in stock!</span>
+>   {% endif %}
+> {% endfor %}
+> ```
 
 ---
 
@@ -263,7 +286,24 @@ Also ensure `django.contrib.sessions` is in `INSTALLED_APPS` and the session mid
 
 ## Known Limitations & Future Improvements
 
-- **No stock validation**: Adding more items than available stock is allowed silently.
 - **No authentication guard**: Anonymous users can add items. If your checkout requires login, the cart will persist across login via the session.
 - **Price stored at add-time**: If a product's price changes, the cart shows the old price until the session expires or the item is re-added. This is intentional for price consistency during checkout.
 - **No coupon / discount support** built in.
+
+---
+
+## Recent Changes
+
+### Stock Validation (April 2026)
+
+- The cart detail view now checks live `stock_quantity` for every item
+- Items that exceed stock show a red warning in both mobile card view and desktop table view
+- The Checkout button is disabled when `has_stock_issues` is True
+- A second stock check happens at the checkout view as a final guard
+
+### Quantity Stepper Buttons (April 2026)
+
+- The number input + refresh icon was replaced with `−` and `+` buttons
+- Each button is its own small `<form>` posting a hidden `quantity` field
+- Pressing `−` at quantity 1 posts `quantity=0`, which `update_cart` treats as a remove
+- Works on both mobile (card layout) and desktop (table layout)
