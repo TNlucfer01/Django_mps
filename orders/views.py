@@ -3,10 +3,12 @@ import logging
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
 from django.conf import settings
+from django.db.models import F
 import requests
 import threading
 from cart.cart import Cart
 from .models import Order, OrderItem
+from products.models import Product
 
 logger = logging.getLogger(__name__)
 
@@ -96,6 +98,15 @@ def checkout(request):
                 price=item["price"],
                 quantity=item["quantity"],
             )
+            # Atomically deduct stock right at order placement
+            Product.objects.filter(pk=item["product"].pk).update(
+                stock_quantity=F("stock_quantity") - item["quantity"]
+            )
+            # Clamp at 0 and re-save so availability_status stays in sync
+            product = Product.objects.get(pk=item["product"].pk)
+            if product.stock_quantity < 0:
+                product.stock_quantity = 0
+            product.save(update_fields=["stock_quantity", "availability_status"])
 
         # Build Google Sheets payload string from cart BEFORE clearing it
         products_list = []
