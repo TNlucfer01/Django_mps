@@ -37,7 +37,7 @@
             <div class="xl:col-span-8 space-y-6">
                 <!-- Mobile Card View (Hidden on MD and up) -->
                 <div class="block md:hidden space-y-4">
-                    {% for item in cart %}
+                    {% for item in cart_items %}
                     <div class="bg-base-200/30 rounded-[2rem] p-4 flex flex-col gap-4 relative reveal reveal-up delay-{{ forloop.counter|add:1 }}00">
                         <!-- Delete Button (Top Right) -->
                         <div class="absolute top-2 right-2 z-10">
@@ -90,6 +90,12 @@
                                 <p class="font-black text-xl text-base-content tracking-tighter leading-none mt-1">₹{{ item.total_price }}</p>
                             </div>
                         </div>
+                        {% if item.over_limit %}
+                        <div class="flex items-center gap-2 mt-2 bg-error/10 border border-error/30 rounded-xl px-3 py-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 text-error shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
+                            <p class="text-[10px] font-black text-error uppercase tracking-widest">Only {{ item.available_stock }} available — reduce quantity</p>
+                        </div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
@@ -107,7 +113,7 @@
                         </tr>
                     </thead>
                     <tbody class="space-y-4">
-                        {% for item in cart %}
+                        {% for item in cart_items %}
                         <tr class="bg-base-200/30 hover:bg-base-200 transition-colors rounded-[2rem] overflow-hidden reveal reveal-up delay-{{ forloop.counter|add:1 }}00">
                             <td class="pl-6 py-8 rounded-l-[2rem]">
                                 <div class="flex items-center gap-6">
@@ -125,6 +131,12 @@
                                     <div>
                                         <a href="{{ item.product.get_absolute_url }}" class="text-xl font-extrabold tracking-tight hover:text-primary transition-colors block">{{ item.product.name }}</a>
                                         <p class="text-[10px] font-black opacity-30 uppercase tracking-widest mt-1">{{ item.product.category.name }}</p>
+                                        {% if item.over_limit %}
+                                        <div class="flex items-center gap-1 mt-2">
+                                            <svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 text-error shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
+                                            <span class="text-[10px] font-black text-error uppercase tracking-widest">Only {{ item.available_stock }} in stock</span>
+                                        </div>
+                                        {% endif %}
                                     </div>
                                 </div>
                             </td>
@@ -189,12 +201,22 @@
                     </div>
                     
                     <div class="pt-4 md:pt-6">
+                        {% if has_stock_issues %}
+                        <div class="flex items-center gap-3 mb-4 bg-error/10 border border-error/30 rounded-2xl px-4 py-3">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-error shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01M10.29 3.86L1.82 18a2 2 0 001.71 3h16.94a2 2 0 001.71-3L13.71 3.86a2 2 0 00-3.42 0z" /></svg>
+                            <p class="text-[11px] font-black text-error uppercase tracking-widest leading-snug">Update quantities above to match available stock before checking out.</p>
+                        </div>
+                        <button disabled class="btn btn-block h-16 md:h-20 rounded-[1.5rem] font-black text-lg md:text-xl tracking-tight uppercase opacity-40 cursor-not-allowed">
+                            Checkout Now
+                        </button>
+                        {% else %}
                         <a href="{% url 'orders:checkout' %}" class="btn bg-primary-gradient border-none text-white btn-lg btn-block h-16 md:h-20 rounded-[1.5rem] shadow-2xl shadow-primary/20 font-black text-lg md:text-xl tracking-tight uppercase group">
                             Checkout Now
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 md:h-6 md:w-6 ml-2 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 8l4 4m0 0l-4 4m4-4H3" />
                             </svg>
                         </a>
+                        {% endif %}
                     </div>
                     
                     <div class="bg-base-200/50 p-4 md:p-6 rounded-2xl flex items-center gap-4 border border-base-200 mt-6 md:mt-10">

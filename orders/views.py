@@ -91,6 +91,20 @@ def checkout(request):
             is_paid=True,
         )
 
+        # --- Stock pre-check: validate before touching the DB ---
+        for item in cart:
+            product = item["product"]
+            fresh = Product.objects.get(pk=product.pk)
+            if fresh.stock_quantity < item["quantity"]:
+                # Roll back the order we just created and abort
+                order.delete()
+                messages.error(
+                    request,
+                    f"Sorry, '{fresh.name}' only has {fresh.stock_quantity} unit(s) in stock "
+                    f"but you requested {item['quantity']}. Please update your cart."
+                )
+                return redirect("cart:cart_detail")
+
         for item in cart:
             OrderItem.objects.create(
                 order=order,
@@ -98,11 +112,12 @@ def checkout(request):
                 price=item["price"],
                 quantity=item["quantity"],
             )
-            # Atomically deduct stock right at order placement
+            # Clamp the deduction so stock never goes below 0 at the DB level
+            qty = item["quantity"]
             Product.objects.filter(pk=item["product"].pk).update(
-                stock_quantity=F("stock_quantity") - item["quantity"]
+                stock_quantity=F("stock_quantity") - qty
             )
-            # Clamp at 0 and re-save so availability_status stays in sync
+            # Re-fetch and sync availability_status
             product = Product.objects.get(pk=item["product"].pk)
             if product.stock_quantity < 0:
                 product.stock_quantity = 0

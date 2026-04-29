@@ -34,7 +34,27 @@ def remove_from_cart(request, slug):
 
 def cart_detail(request):
     cart = Cart(request)
-    return render(request, "cart/cart_detail.html", {"cart": cart})
+
+    # Annotate each item with live stock info so template needs no custom filter
+    cart_items = []
+    has_stock_issues = False
+    for item in cart:
+        product = item["product"]
+        available = product.stock_quantity
+        over_limit = item["quantity"] > available
+        if over_limit:
+            has_stock_issues = True
+        cart_items.append({
+            **item,
+            "available_stock": available,
+            "over_limit": over_limit,
+        })
+
+    return render(request, "cart/cart_detail.html", {
+        "cart": cart,
+        "cart_items": cart_items,
+        "has_stock_issues": has_stock_issues,
+    })
 
 
 @require_POST

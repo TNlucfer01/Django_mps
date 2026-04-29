@@ -74,6 +74,16 @@
             class="badge badge-error rounded-xl font-black uppercase tracking-widest text-[10px] px-4 py-3">{{product.discount_percentage }}% OFF</span>{% endif %}
         </div>
 
+        {% if product.stock_quantity > 0 %}
+        <p class="text-[11px] font-black uppercase tracking-widest {% if product.stock_quantity <= 5 %}text-warning{% else %}text-success{% endif %} opacity-80">
+          {% if product.stock_quantity <= 5 %}
+            ⚠ Only {{ product.stock_quantity }} left in stock – order soon!
+          {% else %}
+            ✔ {{ product.stock_quantity }} in stock
+          {% endif %}
+        </p>
+        {% endif %}
+
         <div class="space-y-2">
           {% if product.model_number %}<p class="text-[10px] font-black opacity-30 uppercase tracking-[0.2em]">Model: {{product.model_number }}</p>{% endif %}
           <h1 class="text-3xl md:text-4xl lg:text-5xl font-black tracking-tighter leading-tight">{{ product.name }}</h1>
