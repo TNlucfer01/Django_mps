@@ -17,6 +17,9 @@ ENV/
 *.swo
 *~
 
+
+test_project_reuse/
+
 # Dataset files
 data/
 *.csv
