@@ -66,10 +66,8 @@
                 </label>
             </div>
             <a href="{% url 'core:home' %}" class="flex items-center gap-2 group">
-                <div class="w-10 h-10 bg-primary-gradient rounded-xl flex items-center justify-center text-white shadow-lg shadow-gray-500/20 group-hover:rotate-12 transition-transform">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
+                <div class="w-10 h-10  rounded-xl overflow-hidden flex items-center justify-center shadow-lg shadow-gray-500/20 group-hover:rotate-12 transition-transform">
+                    <img src="{% static 'images/logo.svg' %}" alt="SS Electronics Logo" class="w-full h-full object-cover">
                 </div>
                 <div>
                     <span class="text-base md:text-xl font-extrabold tracking-tight" style="white-space: nowrap;">SS Electronics</span>
@@ -144,10 +142,8 @@
         <label for="mobile-menu-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
         <div class="w-80 min-h-full p-6 text-white" style="background: rgba(0, 79, 0, 0.45); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-right: 1px solid rgba(255,255,255,0.15);">
             <div class="flex items-center gap-3 mb-10 border-b border-white/10 pb-6">
-                <div class="w-10 h-10 bg-primary-gradient rounded-xl flex items-center justify-center text-white">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z" />
-                    </svg>
+                <div class="w-10 h-10 bg-primary-gradient rounded-xl overflow-hidden flex items-center justify-center">
+                    <img src="{% static 'images/logo.svg' %}" alt="SS Electronics Logo" class="w-full h-full object-cover">
                 </div>
                 <span class="text-xl font-black tracking-tight">SS Electronics</span>
             </div>
