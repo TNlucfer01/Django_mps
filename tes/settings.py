@@ -118,35 +118,54 @@ else:
         }
     }
 # ─── Caching ─────────────────────────────────────────────────────────────────
-# Strategy:
-#   Production (Vercel): Upstash Redis — persists across serverless invocations,
-#                        free tier (10k cmd/day) is plenty for a small shop.
-#   Local dev:           File-based cache — zero setup, works offline.
+# ── Three-tier cache strategy ─────────────────────────────────────────────────
 #
-# WHY not file cache on Vercel: Vercel filesystem is read-only except /tmp,
-# and /tmp is wiped between invocations — so file cache is useless there.
-# WHY not LocMemCache on Vercel: process dies after each request — same issue.
+#  Tier 1 — Upstash Redis   : REDIS_URL / UPSTASH_REDIS_URL is set (production)
+#            Fast, persists across Vercel invocations. Add the URL to Vercel env vars.
+#
+#  Tier 2 — LocMemCache     : Running on Vercel WITHOUT Redis configured yet.
+#            Stores in process RAM — per-invocation only (no persistence), but
+#            NEVER crashes. App stays alive while you go set up the Redis URL.
+#
+#  Tier 3 — FileBasedCache  : Local dev only.
+#            Easy, zero setup, works offline.
+#
+# WHY file cache crashes on Vercel:
+#   /var/task/ (your app) is READ-ONLY on Vercel. Any attempt to write a file
+#   there raises OSError: [Errno 30] Read-only file system.
+
+# Vercel automatically sets this env var — we use it to detect the environment
+IS_VERCEL = bool(os.environ.get("VERCEL"))
 
 # Accept either name — UPSTASH_REDIS_URL (Vercel dashboard) or REDIS_URL (.env local)
 UPSTASH_REDIS_URL = os.environ.get("UPSTASH_REDIS_URL") or os.environ.get("REDIS_URL", "")
 
 if UPSTASH_REDIS_URL:
-    # ── Production: Upstash Redis (free tier, works on Vercel serverless) ──
+    # ── Tier 1: Upstash Redis ─────────────────────────────────────────────────
     CACHES = {
         "default": {
             "BACKEND": "django_redis.cache.RedisCache",
             "LOCATION": UPSTASH_REDIS_URL,
             "OPTIONS": {
                 "CLIENT_CLASS": "django_redis.client.DefaultClient",
-                "SOCKET_CONNECT_TIMEOUT": 3,   # fail fast rather than hang
+                "SOCKET_CONNECT_TIMEOUT": 3,
                 "SOCKET_TIMEOUT": 3,
-                "IGNORE_EXCEPTIONS": True,      # if Redis is down, app still works
+                "IGNORE_EXCEPTIONS": True,  # Redis down → app still works, just slower
             },
-            "TIMEOUT": 300,  # default 5 min — overridden per cache.set() call
+            "TIMEOUT": 300,
+        }
+    }
+elif IS_VERCEL:
+    # ── Tier 2: Vercel without Redis — safe in-memory fallback ───────────────
+    # Per-invocation only (no cross-request persistence), but NEVER crashes.
+    # Add REDIS_URL to Vercel env vars to graduate to Tier 1.
+    CACHES = {
+        "default": {
+            "BACKEND": "django.core.cache.backends.locmem.LocMemCache",
         }
     }
 else:
-    # ── Local dev: file-based cache — zero setup, works offline ──
+    # ── Tier 3: Local dev — file-based cache ─────────────────────────────────
     CACHES = {
         "default": {
             "BACKEND": "django.core.cache.backends.filebased.FileBasedCache",

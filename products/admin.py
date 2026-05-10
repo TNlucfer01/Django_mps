@@ -1,5 +1,6 @@
 from django import forms
 from django.contrib import admin
+from django.conf import settings
 from .models import Product, ProductImage, Category, Tag
 from .widgets import KeyValueWidget
 
@@ -63,10 +64,29 @@ class ProductImageInline(admin.TabularInline):  # what is this even do
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    form = ProductAdminForm  # how does this form know  whete to  show up i really don't understand this at all
-    inlines = [
-        ProductImageInline
-    ]  # what sis this inline even means . it let me edit or view other model inside the current model . if i want this to wok i should add the
+    form = ProductAdminForm
+    inlines = [ProductImageInline]
+
+    def _cloudinary_context(self):
+        """Return Cloudinary vars needed by the upload widget template."""
+        import cloudinary
+        cfg = cloudinary.config()
+        return {
+            "cloudinary_cloud_name":    cfg.cloud_name or "",
+            # Upload preset must be created in Cloudinary Dashboard:
+            # Settings → Upload → Upload presets → Add preset → Mode: Unsigned
+            "cloudinary_upload_preset": getattr(settings, "CLOUDINARY_UPLOAD_PRESET", "ml_default"),
+        }
+
+    def add_view(self, request, form_url="", extra_context=None):
+        extra_context = extra_context or {}
+        extra_context.update(self._cloudinary_context())
+        return super().add_view(request, form_url, extra_context)
+
+    def change_view(self, request, object_id, form_url="", extra_context=None):
+        extra_context = extra_context or {}
+        extra_context.update(self._cloudinary_context())
+        return super().change_view(request, object_id, form_url, extra_context)
     list_display = [
         "name",
         "brand",
